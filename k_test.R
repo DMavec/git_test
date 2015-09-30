@@ -56,3 +56,5 @@ png('neg.png', width = 1280, height = 800)
 wordcloud(txt.dn$word,txt.dn$freq, scale=c(8,.2), max.words=50, 
           random.order=F, rot.per=0, colors='#E31A1C')
 dev.off()
+
+
