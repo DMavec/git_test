@@ -1,40 +1,51 @@
+game_id,summoner_name,champion
+0,diggs,Gangplank
 0,mwaxy,LeBlanc
 0,2dmin,Jinx
-0,randycaek,Bard
-0,randycaek,Tahm Kench
+0,menelaus34,Bard
+0,loui8sdstk,Tahm Kench
+1,diggs,Swain
 1,mwaxy,Syndra
 1,2dmin,Talon
-1,randycaek,Soraka
-1,randycaek,Tahm Kench
+1,menelaus34,Soraka
+1,loui8sdstk,Tahm Kench
+2,diggs,Swain
 2,mwaxy,Syndra
 2,2dmin,Talon
-2,randycaek,Soraka
-2,randycaek,Tahm Kench
+2,menelaus34,Soraka
+2,loui8sdstk,Tahm Kench
+3,diggs,Swain
 3,2dmin,Syndra
-3,randycaek,Sona
+3,menelaus34,Sona
 3,muncheroo,Soraka
-3,randycaek,Tahm Kench
+3,loui8sdstk,Tahm Kench
+4,diggs,Swain
 4,mwaxy,Skarner
 4,2dmin,Syndra
-4,randycaek,Sona
-4,randycaek,Soraka
+4,menelaus34,Sona
+4,loui8sdstk,Soraka
+5,diggs,Swain
 5,mwaxy,Ziggs
 5,randycaek,Master Yi
 5,2dmin,Caitlyn
-5,randycaek,Bard
+5,menelaus34,Bard
+6,diggs,Swain
 6,mwaxy,Skarner
 6,2dmin,Syndra
-6,randycaek,Sona
-6,randycaek,Soraka
+6,menelaus34,Sona
+6,loui8sdstk,Soraka
+7,diggs,Swain
 7,smatties,Skarner
 7,2dmin,Syndra
 7,muncheroo,Sona
 7,orangu,Soraka
+8,diggs,Swain
 8,mwaxy,Skarner
 8,smatties,Sona
 8,2dmin,Sivir
 8,orangu,Soraka
+9,diggs,Skarner
 9,smatties,Lux
 9,2dmin,Riven
-9,randycaek,Kalista
+9,menelaus34,Kalista
 9,orangu,Leona

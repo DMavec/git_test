@@ -19,10 +19,11 @@ SUMMONER_NAMES = [
     'diggs',
     'bumster',
     'mwaxy',
-    'loui8s_dstk',
+    'loui8sdstk',
     'smatties',
     '2dmin',
     'pangryanda',
+    'menelaus34',
     'menelaus',
     'ridethellama',
     'dicedstk',
@@ -39,3 +40,5 @@ SUMMONER_NAMES = [
     'thereisnosaurus',
     'kkfizzban'
 ]
+
+NAMES_DICT = eval(open('static_summoner_ids.txt', 'r').read())
