@@ -1,5 +1,5 @@
-from r_api import RiotAPI
-import r_consts as Consts
+from RiotAPI_object import RiotAPI
+import RiotAPI_constants as Consts
 
 def main():
     api = RiotAPI('2f71320a-8bfd-4650-b391-b3ff56e06e0a')

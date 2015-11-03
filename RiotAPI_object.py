@@ -1,5 +1,5 @@
 import requests
-import r_consts as Consts
+import RiotAPI_constants as Consts
 
 class RiotAPI(object):
     def __init__(self, api_key, region=Consts.REGIONS['oceania']):
