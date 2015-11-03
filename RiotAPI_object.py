@@ -63,7 +63,12 @@ class RiotAPI(object):
             static=True
         )
 
-    def static_get_champion(self, champ_id):
+    def static_get_champion_id(self, champ_id):
         return self._static_request(
             'champion/{id}'.format(id=champ_id),
+        )
+
+    def static_get_champion(self):
+        return self._static_request(
+            'champion/',
         )

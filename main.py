@@ -6,11 +6,12 @@ def main():
 
     #api.update_static_summoner_ids()
 
-    name = 'diggs'
+    #name = 'diggs'
     #p_games = process_games(name, api)
     #print p_games
     #output_game(p_games)
-    champ_list = [champ['name'] for champ in api.static_get_champion('')['data']]
+    champ_list = [value['name'] for attribute, value in api.static_get_champion()['data'].iteritems()]
+    champ_list.sort()
     print champ_list
 
 def process_games(name, api):
@@ -23,7 +24,7 @@ def process_games(name, api):
     for game in games['games']:
         team = game['teamId']
         teammates = [x for x in game['fellowPlayers'] if x['teamId'] == team]
-        champ_name = api.static_get_champion(game['championId'])['name']
+        champ_name = api.static_get_champion_id(game['championId'])['name']
 
         prc_game = [{'summoner': name, 'champion': champ_name}]
         for i in range(len(teammates)):
@@ -35,7 +36,7 @@ def process_games(name, api):
             else:
                 tm_name = 'randycaek'
 
-            tm_champ = api.static_get_champion(teammates[i]['championId'])['name']
+            tm_champ = api.static_get_champion_id(teammates[i]['championId'])['name']
             print(str(i) + " " + tm_name + " " + tm_champ)
             prc_game.append({'summoner': tm_name, 'champion': tm_champ})
 
