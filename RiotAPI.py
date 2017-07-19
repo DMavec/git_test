@@ -1,5 +1,5 @@
 import requests
-import RiotAPI_constants as Consts
+import r_consts as Consts
 
 class RiotAPI(object):
     def __init__(self, api_key, region=Consts.REGIONS['oceania']):
@@ -13,9 +13,16 @@ class RiotAPI(object):
             if key not in args:
                 args[key] = value
 
+        print(Consts.URL['base'].format(
+                proxy=self.region,
+                static='static-data/' if static else '',
+                region=self.region,
+                url=api_url
+            ))
+
         response = requests.get(
             Consts.URL['base'].format(
-                proxy='global' if static else self.region,
+                proxy=self.region,
                 static='static-data/' if static else '',
                 region=self.region,
                 url=api_url
@@ -32,28 +39,34 @@ class RiotAPI(object):
         )
         return self._request(api_url)
 
-    def get_games(self, id):
-        api_url = Consts.URL['game'].format(
-            version=Consts.API_VERSIONS['game'],
+    def get_recent_matches(self, id):
+        api_url = Consts.URL['match-recent'].format(
+            version=Consts.API_VERSIONS['match'],
             id=id
         )
         return self._request(api_url)
 
+    def get_match(self, id):
+        api_url = Consts.URL['match'].format(
+            version=Consts.API_VERSIONS['match'],
+            id=id
+        )
+        return self._request(api_url)
 
     def update_static_summoner_ids(self):
         ids = {}
         for name in Consts.SUMMONER_NAMES:
-            print 'Retrieving =>',name
+            print('Retrieving =>' + name)
             try:
                 id = self.get_summoner_by_name(name)[name]['id']
                 ids[id] = name
             except:
-                print 'WARNING: Name not found.'
+                print('WARNING: Name not found.')
 
         target = open('static_summoner_ids.txt', 'w')
         target.write(str(ids))
 
-    # lol-static-data-v1.2
+    # lol-static-data-v3
     def _static_request(self, end_url):
         return self._request(
             Consts.URL['lol-static-data'].format(
@@ -63,12 +76,7 @@ class RiotAPI(object):
             static=True
         )
 
-    def static_get_champion_id(self, champ_id):
+    def static_get_champion(self, champ_id):
         return self._static_request(
-            'champion/{id}'.format(id=champ_id),
-        )
-
-    def static_get_champion(self):
-        return self._static_request(
-            'champion/',
+            'champions/{id}'.format(id=champ_id),
         )
