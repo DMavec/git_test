@@ -1,9 +1,10 @@
 import requests
-import r_consts as Consts
+import constants as consts
 import backoff
+from time import sleep
 
 class RiotAPI(object):
-    def __init__(self, api_key, region=Consts.REGIONS['oceania']):
+    def __init__(self, api_key, region=consts.REGIONS['oceania']):
         self.api_key = api_key
         self.region = region
 
@@ -17,49 +18,57 @@ class RiotAPI(object):
             if key not in args:
                 args[key] = value
 
-        print(Consts.URL['base'].format(
+        print(consts.URL['base'].format(
                 proxy=self.region,
                 static='static-data/' if static else '',
                 region=self.region,
                 url=api_url
             ))
 
-        response = requests.get(
-            Consts.URL['base'].format(
-                proxy=self.region,
-                static='static-data/' if static else '',
-                region=self.region,
-                url=api_url
-            ),
-            params=args
-        )
+        retries = 1
+        while 0 < retries < 5:
+            response = requests.get(
+                consts.URL['base'].format(
+                    proxy=self.region,
+                    static='static-data/' if static else '',
+                    region=self.region,
+                    url=api_url
+                ),
+                params=args
+            )
+
+            if 'status' in response.json().keys():
+                retries += 1
+                sleep(30)
+            else:
+                retries = 0
 
         return response.json()
 
     def get_summoner_by_name(self, name):
-        api_url = Consts.URL['summoner_by_name'].format(
-            version=Consts.API_VERSIONS['summoner'],
+        api_url = consts.URL['summoner_by_name'].format(
+            version=consts.API_VERSIONS['summoner'],
             names=name
         )
         return self._request(api_url)
 
     def get_recent_matches(self, id):
-        api_url = Consts.URL['match-recent'].format(
-            version=Consts.API_VERSIONS['match'],
+        api_url = consts.URL['match-recent'].format(
+            version=consts.API_VERSIONS['match'],
             id=id
         )
         return self._request(api_url)
 
     def get_match(self, id):
-        api_url = Consts.URL['match'].format(
-            version=Consts.API_VERSIONS['match'],
+        api_url = consts.URL['match'].format(
+            version=consts.API_VERSIONS['match'],
             id=id
         )
         return self._request(api_url)
 
     def update_static_summoner_ids(self):
         ids = {}
-        for name in Consts.SUMMONER_NAMES:
+        for name in consts.SUMMONER_NAMES:
             print('Retrieving =>' + name)
             try:
                 id = self.get_summoner_by_name(name)[name]['id']
@@ -73,8 +82,8 @@ class RiotAPI(object):
     # lol-static-data-v3
     def _static_request(self, end_url):
         return self._request(
-            Consts.URL['lol-static-data'].format(
-                version=Consts.API_VERSIONS['lol-static-data'],
+            consts.URL['lol-static-data'].format(
+                version=consts.API_VERSIONS['lol-static-data'],
                 end_url=end_url
             ),
             static=True

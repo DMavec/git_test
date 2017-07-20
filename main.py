@@ -1,29 +1,34 @@
 from RiotAPI import RiotAPI
 from ETLByName import ETLByName
-import r_consts as Consts
-import pickle
+from Visualise import Visualise
+import constants as consts
+import pandas as pd
 
 def main():
-    api = RiotAPI(Consts.API_KEY)
-    #name = 'menelaus34'
-    for name in Consts.SUMMONER_NAMES:
+    api = RiotAPI(consts.API_KEY)
+    for name in consts.SUMMONER_NAMES:
         etl = ETLByName(name, api)
         etl.extract()
-
-        #save_obj(etl, 'test_cache')
-        #etl = load_obj('test_cache')
-
         etl.transform()
+        etl.load('data/game_history.csv')
 
-        etl.load(file_name='data/game_history.csv')
+    game_history = pd.read_csv('data/game_history.csv')
+    viz = Visualise(game_history, consts.SUMMONER_NAMES)
+    viz.build()
 
-def save_obj(obj, name ):
-    with open('obj/'+ name + '.pkl', 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-def load_obj(name ):
-    with open('obj/' + name + '.pkl', 'rb') as f:
-        return pickle.load(f)
 
 if __name__ == "__main__":
     main()
+
+## Caching script for dev purposes only
+# import pickle
+# def save_obj(obj, name ):
+#     with open('obj/'+ name + '.pkl', 'wb') as f:
+#         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+#
+# def load_obj(name ):
+#     with open('obj/' + name + '.pkl', 'rb') as f:
+#         return pickle.load(f)
+#
+# save_obj(etl, 'test_cache')
+# etl = load_obj('test_cache')

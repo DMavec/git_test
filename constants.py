@@ -30,6 +30,7 @@ SUMMONER_NAMES = [
     'loui8sdstk',
     'smatties',
     '2dmin',
+    'skandaras',
     #'pangryanda',
     'menelaus34',
     # 'menelaus',

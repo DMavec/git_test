@@ -1,15 +1,13 @@
 import pandas as pd
-import os
-import r_consts as Consts
-import re
+import os, sys, re
+import constants as consts
 
 class ETLByName(object):
     def __init__(self, summonerName, api):
         self.summonerName = summonerName.lower()
         self.api = api
-
         self.accountId = api.get_summoner_by_name(self.summonerName)['accountId']
-        self.oldIds = Consts.OLD_IDS[Consts.OLD_IDS['main_player'] == self.summonerName]['game_id'].tolist()#Consts.OLD_IDS.filter(like=summonerName, axis='main_player')['game_id']  ## Don't know why this doesn't work...
+        self.oldIds = consts.OLD_IDS[consts.OLD_IDS['main_player'] == self.summonerName]['game_id'].tolist()#consts.OLD_IDS.filter(like=summonerName, axis='main_player')['game_id']  ## Don't know why this doesn't work...
         self.gameIds = []
         self.extract_data = {'game_id': [], 'main_player': [], 'win_status': [], 'team': []}
         self.transform_data = {}
@@ -24,18 +22,26 @@ class ETLByName(object):
 
     def _extract_by_gameid(self, gameId):
         match_details = self.api.get_match(gameId)
-        if match_details == None:
-            return 'request fail'
+        try:
+            if match_details == None:
+                return 'request fail'
 
-        # Check if ranked game - non-ranked participants are anonymous
-        # TODO: Find out if there is a better way to identify ranked games from the API
-        if 'player' not in match_details['participantIdentities'][0].keys():
-            return 'skip'
+            # Check if ranked game - non-ranked participants are anonymous
+            # TODO: Find out if there is a better way to identify ranked games from the API
+            if 'player' not in match_details['participantIdentities'][0].keys():
+                return 'skip'
+        except:
+            print(match_details)
+            print('Unexpected error with data checking in _extract_by_gameid:', sys.exc_info()[0])
 
-        team = [x['player']['summonerName'].lower() for x in match_details['participantIdentities']]
+        team = [re.sub('[\s+]', '', x['player']['summonerName']).lower() for x in match_details['participantIdentities']]
 
-        pid = [x['participantId'] for x in match_details['participantIdentities'] if self.summonerName in re.sub('[\s+]', '', x['player']['summonerName']).lower()]
-        win_status = [x['stats']['win'] for x in match_details['participants'] if x['participantId'] == pid[0]][0]
+        pid = [x['participantId']
+               for x in match_details['participantIdentities'] 
+               if self.summonerName in re.sub('[\s+]', '', x['player']['summonerName']).lower()]
+        win_status = [x['stats']['win'] 
+                      for x in match_details['participants'] 
+                      if x['participantId'] == pid[0]][0]
 
         self.extract_data['game_id'].append(gameId)
         self.extract_data['win_status'].append(win_status)
@@ -55,5 +61,5 @@ class ETLByName(object):
         column_flag = not os.path.isfile(file_name)
         load_ids = pd.DataFrame.from_dict({'main_player': self.summonerName, 'game_ids': self.gameIds})
 
-        pd.DataFrame.to_csv(self.transform_data, file_name, mode='a', header=column_flag, index=False)
-        pd.DataFrame.to_csv(load_ids[['main_player', 'game_ids']], 'load_log.csv', mode='a', header=False, index=False)
+        pd.DataFrame.to_csv(self.transform_data, file_name, mode='a', header=column_flag, index=False, encoding='utf-8')
+        pd.DataFrame.to_csv(load_ids[['main_player', 'game_ids']], 'data/load_log.csv', mode='a', header=False, index=False, encoding='utf-8')
