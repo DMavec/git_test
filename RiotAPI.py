@@ -1,11 +1,15 @@
 import requests
 import r_consts as Consts
+import backoff
 
 class RiotAPI(object):
     def __init__(self, api_key, region=Consts.REGIONS['oceania']):
         self.api_key = api_key
         self.region = region
 
+    @backoff.on_exception(backoff.expo,
+                          requests.RequestException,
+                          max_value=32)
     def _request(self, api_url, static=False, params={}):
         # Put additional parameters into args
         args = {'api_key': self.api_key}

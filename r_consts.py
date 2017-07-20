@@ -28,7 +28,7 @@ SUMMONER_NAMES = [
     'loui8sdstk',
     'smatties',
     '2dmin',
-    'pangryanda',
+    #'pangryanda',
     'menelaus34',
     # 'menelaus',
     # 'ridethellama',
@@ -47,6 +47,4 @@ SUMMONER_NAMES = [
     # 'kkfizzban'
 ]
 
-NAMES_DICT = eval(open('static_summoner_ids.txt', 'r').read())
-
-OLD_IDS = pd.read_csv('load_log.csv')
+OLD_IDS = pd.read_csv('data/load_log.csv')

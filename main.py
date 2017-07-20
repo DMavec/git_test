@@ -5,7 +5,7 @@ import pickle
 
 def main():
     api = RiotAPI('RGAPI-7de18e44-1325-4df9-b355-82dd7660d66b')
-    name = 'menelaus34'
+    #name = 'menelaus34'
     for name in Consts.SUMMONER_NAMES:
         etl = ETLByName(name, api)
         etl.extract()
@@ -15,7 +15,7 @@ def main():
 
         etl.transform()
 
-        etl.load(file_name='game_history.csv')
+        etl.load(file_name='data/game_history.csv')
 
 def save_obj(obj, name ):
     with open('obj/'+ name + '.pkl', 'wb') as f:

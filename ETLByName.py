@@ -24,7 +24,11 @@ class ETLByName(object):
 
     def _extract_by_gameid(self, gameId):
         match_details = self.api.get_match(gameId)
+        if match_details == None:
+            return 'request fail'
 
+        # Check if ranked game - non-ranked participants are anonymous
+        # TODO: Find out if there is a better way to identify ranked games from the API
         if 'player' not in match_details['participantIdentities'][0].keys():
             return 'skip'
 
