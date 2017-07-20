@@ -1,5 +1,7 @@
 import pandas as pd
 
+API_KEY = pd.read_csv('data/api_key.txt')
+
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',
     'summoner_by_name': 'summoner/v{version}/summoners/by-name/{names}',

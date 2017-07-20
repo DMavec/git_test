@@ -1,3 +1,9 @@
+# PyCharm Settings
+.idea/
+
+#API Key
+api_key.txt
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

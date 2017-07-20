@@ -4,7 +4,7 @@ import r_consts as Consts
 import pickle
 
 def main():
-    api = RiotAPI('RGAPI-7de18e44-1325-4df9-b355-82dd7660d66b')
+    api = RiotAPI(Consts.API_KEY)
     #name = 'menelaus34'
     for name in Consts.SUMMONER_NAMES:
         etl = ETLByName(name, api)
