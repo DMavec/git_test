@@ -37,19 +37,19 @@ class Visualise(object):
                 .pivot(index='main_player', columns='player', values='mean')
                )
 
-        xlabs = dfm.columns.values
-        xpos = np.arange(len(xlabs))
-        ylabs = dfm.index.values
-        ypos = np.arange(len(ylabs))
-        zval = dfm
+        # xlabs = dfm.columns.values
+        # xpos = np.arange(len(xlabs))
+        # ylabs = dfm.index.values
+        # ypos = np.arange(len(ylabs))
+        # zval = dfm
 
         #f = open('data/summary.csv', mode='w')
         #f.write('# of Wins\n')
-        dfs.to_csv('data/summary.csv', mode='w')
+        dfs.to_csv('data/summary-wins.csv', mode='w')
         #f.write('\n\n# of Games\n')
-        dfc.to_csv('data/summary.csv', mode='a')
+        dfc.to_csv('data/summary-number.csv', mode='w')
         #f.write('\n\nWin Rate\n')
-        dfm.to_csv('data/summary.csv', mode='a')
+        dfm.to_csv('data/summary-winrate.csv', mode='w')
 
         # print(zval)
         #

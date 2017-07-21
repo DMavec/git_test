@@ -1,5 +1,7 @@
 # PyCharm Settings
-.idea/
+?idea/
+*summary*
+__pycache__/
 
 #API Key
 api_key.txt
