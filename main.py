@@ -14,7 +14,7 @@ def main():
 
     game_history = pd.read_csv('data/game_history.csv')
     viz = Visualise(game_history, consts.SUMMONER_NAMES)
-    viz.build()x
+    viz.build()
 
 
 if __name__ == "__main__":
