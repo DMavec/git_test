@@ -5,16 +5,16 @@ import constants as consts
 import pandas as pd
 
 def main():
-    # api = RiotAPI(consts.API_KEY)
-    # for name in consts.SUMMONER_NAMES:
-    #     etl = ETLByName(name, api)
-    #     etl.extract()
-    #     etl.transform()
-    #     etl.load('data/game_history.csv')
+    api = RiotAPI(consts.API_KEY)
+    for name in consts.SUMMONER_NAMES:
+        etl = ETLByName(name, api)
+        etl.extract()
+        etl.transform()
+        etl.load('data/game_history.csv')
 
     game_history = pd.read_csv('data/game_history.csv')
     viz = Visualise(game_history, consts.SUMMONER_NAMES)
-    viz.build()
+    viz.build()x
 
 
 if __name__ == "__main__":
