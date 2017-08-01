@@ -9,7 +9,7 @@ class Visualise(object):
         self.players = players
 
     def build(self):
-        print(self.data)
+        #print(self.data)
         df = self.data
 
         df = df.drop('game_id', axis=1)
