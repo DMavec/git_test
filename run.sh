@@ -1,4 +1,5 @@
 cd /home/mavec/riot_project/
+git pull
 
 python3.6 main.py
 
