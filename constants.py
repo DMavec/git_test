@@ -29,25 +29,26 @@ SUMMONER_NAMES = [
     'mwaxy',
     'loui8sdstk',
     'smatties',
-    '2dmin',
+    #'2dmin',
     'skandaras',
     #'pangryanda',
     'menelaus34',
-    # 'menelaus',
-    # 'ridethellama',
+    #'menelaus',
+    #'ridethellama',
     'dicedstk',
-    # 'orangu',
-    # 'shaarcer',
-    # 'sellerie',
-    # 'muncheroo',
+    #'orangu',
+    #'shaarcer',
+    #'sellerie',
+    #'muncheroo',
     'splunkle',
-    'endgame'
-    # 'minisundae',
-    # 'themrb',
-    # 'panman',
-    # 'saltimate',
-    # 'thereisnosaurus',
-    # 'kkfizzban'
+    'endgame',
+	'loui9sdstk'
+    #'minisundae',
+    #'themrb',
+    #'panman',
+    #'saltimate',
+    #'thereisnosaurus',
+    #'kkfizzban'
 ]
 
 OLD_IDS = pd.read_csv('data/load_log.csv')
