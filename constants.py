@@ -41,7 +41,7 @@ SUMMONER_NAMES = [
     #'sellerie',
     #'muncheroo',
     'splunkle',
-    'endgame',
+    'endgamedos',
 	'loui9sdstk'
     #'minisundae',
     #'themrb',
