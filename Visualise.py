@@ -9,14 +9,14 @@ class Visualise(object):
         self.players = players
 
     def build(self):
-        print(self.data)
+        #print(self.data)
         df = self.data
 
-        df = (df.drop('game_id', axis=1)
-                .melt(id_vars=['main_player', 'win_status'])
-                .rename(columns={'value': 'player'})
-                .drop('variable', axis=1)
-              )
+        df = df.drop('game_id', axis=1)
+        df = df.melt(id_vars=['main_player', 'win_status'])
+              #   .rename(columns={'value': 'player'})
+              #   .drop('variable', axis=1)
+              # )
 
 
 
