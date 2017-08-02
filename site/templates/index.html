@@ -7,11 +7,15 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Hello World!</title>
+    <title>Riot Project</title>
   </head>
-  
+
   <body>
-    Hello World!
+    <div class=page>
+      <h1>Win Rate</h1>
+      {% for table in tables %}
+        {{ table|safe }}
+      {% endfor %}
+    </div>
   </body>
 </html>
-
