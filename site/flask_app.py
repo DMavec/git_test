@@ -10,15 +10,20 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    data = (pd.read_csv('riot_project/data/summary-winrate.csv')
+    wins = (pd.read_csv('riot_project/data/summary-winrate.csv')
               .replace(np.nan, '')
+            )
+
+    games = (pd.read_csv('riot_project/data/summary-number.csv')
+               .replace(np.nan, '')
             )
 
 
     return render_template('index.html',
-                            titles=['Win Rate'],
-                            tables=[data.to_html(classes='table table-hover',
+                            titles=['Win Rate', 'Number of Games'],
+                            tables=[wins.to_html(classes='table table-hover',
                                                  float_format='{:.2%}'.format,
-                                                 na_rep='',
+                                                 index=False),
+                                    games.to_html(classes='table table-hover',
                                                  index=False)]
                             )
