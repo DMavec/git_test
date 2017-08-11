@@ -6,7 +6,7 @@ from flask import render_template
 import pandas as pd
 import numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__, static_path = '')
 
 @app.route('/')
 def hello_world():
