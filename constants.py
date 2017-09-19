@@ -40,7 +40,7 @@ SUMMONER_NAMES = [
     #'shaarcer',
     #'sellerie',
     #'muncheroo',
-    'splunkle',
+    #'splunkle',
     'endgamedos',
 	'loui9sdstk'
     #'minisundae',

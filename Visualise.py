@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.plotly as py
+import re
 
 class Visualise(object):
     def __init__(self, data, players):
@@ -9,46 +10,46 @@ class Visualise(object):
         self.players = players
 
     def build(self):
-        #print(self.data)
-        df = self.data
+        print(self.data)
+        game_history = self.data
 
-        df = (df.drop('game_id', axis=1)
-               .melt(id_vars=['main_player', 'win_status'])
-               .rename(columns={'value': 'player'})
-               .drop('variable', axis=1)
-               )
+        game_history = (game_history.drop_duplicates('game_id')
+                        .drop(['main_player', 'game_id'], axis=1)
+                        .assign(players=game_history['0'] + ',' + game_history['1'] + ',' + game_history['2'] + ',' + game_history['3'] + ',' + game_history['4'] + ',' +
+                                        game_history['5'] + ',' + game_history['6'] + ',' + game_history['7'] + ',' + game_history['8'] + ',' + game_history['9'])
+                        )
+        game_history = game_history[['win_status', 'players']]
 
-        df = df[df['player'].isin(self.players)]
+        stats = []
+        [[stats.append({'player1': x,
+                        'player2': y,
+                        'n_wins': sum(game_history['win_status'][game_history['players'].str.contains(x) & game_history['players'].str.contains(y)]),
+                        'n_games': len(game_history['win_status'][game_history['players'].str.contains(x) & game_history['players'].str.contains(y)])
+                     })
+          for x in self.players]
+         for y in self.players]
+        stats = pd.DataFrame(stats)
+        stats['pct_wins'] = stats['n_wins'] / stats['n_games']
+        stats['pct_wins'].fillna(0, inplace=True)
 
-        df = (df.groupby(['main_player', 'player'])
-                 .agg({'win_status' : ['sum', 'count', 'mean']})
-                 .reset_index()
-              )
-
-        dfs = (pd.concat([df['player'], df['main_player'], df['win_status']['sum']], axis=1)
-                .pivot(index='main_player', columns='player', values='sum')
-               )
-        dfc = (pd.concat([df['player'], df['main_player'], df['win_status']['count']], axis=1)
-                .pivot(index='main_player', columns='player', values='count')
-               )
-        dfm = (pd.concat([df['player'], df['main_player'], df['win_status']['mean']], axis=1)
-                .pivot(index='main_player', columns='player', values='mean')
-               )
+        df_wins = (stats[['player1', 'player2', 'n_wins']]
+                   .pivot(index='player1', columns='player2', values='n_wins')
+                   )
+        df_games = (stats[['player1', 'player2', 'n_games']]
+                    .pivot(index='player1', columns='player2', values='n_games')
+                    )
+        df_winrate = (stats[['player1', 'player2', 'pct_wins']]
+                      .pivot(index='player1', columns='player2', values='pct_wins')
+                      )
+        df_wins.to_csv('data/summary-wins.csv', mode='w')
+        df_games.to_csv('data/summary-number.csv', mode='w')
+        df_winrate.to_csv('data/summary-winrate.csv', mode='w')
 
         # xlabs = dfm.columns.values
         # xpos = np.arange(len(xlabs))
         # ylabs = dfm.index.values
         # ypos = np.arange(len(ylabs))
         # zval = dfm
-
-        #f = open('data/summary.csv', mode='w')
-        #f.write('# of Wins\n')
-        dfs.to_csv('data/summary-wins.csv', mode='w')
-        #f.write('\n\n# of Games\n')
-        dfc.to_csv('data/summary-number.csv', mode='w')
-        #f.write('\n\nWin Rate\n')
-        dfm.to_csv('data/summary-winrate.csv', mode='w')
-
         # print(zval)
         #
         # bubbles_mpl = plt.figure()
