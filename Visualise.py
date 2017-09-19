@@ -29,7 +29,6 @@ class Visualise(object):
          for y in self.players]
         stats = pd.DataFrame(stats)
         stats['pct_wins'] = stats['n_wins'] / stats['n_games']
-        stats['pct_wins'].fillna(0, inplace=True)
 
         df_wins = (stats[['player1', 'player2', 'n_wins']]
                    .pivot(index='player1', columns='player2', values='n_wins')
