@@ -10,7 +10,6 @@ class Visualise(object):
         self.players = players
 
     def build(self):
-        print(self.data)
         game_history = self.data
 
         game_history = (game_history.drop_duplicates('game_id')
