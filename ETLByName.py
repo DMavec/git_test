@@ -28,7 +28,7 @@ class ETLByName(object):
 
             # Check if ranked game - non-ranked participants are anonymous
             # TODO: Find out if there is a better way to identify ranked games from the API
-            if match_details['gameMode'] != 'CLASSIC' or match_details['teams']['bans'].length() == 0:
+            if match_details['gameMode'] != 'CLASSIC' or len(match_details['teams']['bans']) == 0:
                 return 'skip'
         except:
             print(match_details)
