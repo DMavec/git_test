@@ -19,6 +19,16 @@ def hello_world():
             )
 
 
+
+    def highlight_max(s):
+        #is_max = s == max(s)
+        #return ['background-color: yellow' if v else '' for v in is_max]
+        return ['background-colour: yellow' for x in s]
+
+    s = (games.style
+              .background_gradient())
+
+
     return render_template('index.html',
                             titles=['Win Rate', 'Number of Games'],
                             tables=[wins.to_html(classes='table table-hover',
@@ -26,4 +36,5 @@ def hello_world():
                                                  index=False),
                                     games.to_html(classes='table table-hover',
                                                  index=False)]
+                                    #s.render()]
                             )
