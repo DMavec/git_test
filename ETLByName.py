@@ -28,19 +28,19 @@ class ETLByName(object):
 
             # Check if ranked game - non-ranked participants are anonymous
             # TODO: Find out if there is a better way to identify ranked games from the API
-            if match_details['gameMode'] != 'CLASSIC' or len(match_details['teams']['bans']) == 0:
+            if match_details['gameMode'] != 'CLASSIC' or len(match_details['teams'][0]['bans']) == 0:
                 return 'skip'
         except:
-            print(match_details)
+            # print(match_details)
             print('Unexpected error with data checking in _extract_by_gameid:', sys.exc_info()[0])
 
         team = [re.sub('[\s+]', '', x['player']['summonerName']).lower() for x in match_details['participantIdentities']]
 
         pid = [x['participantId']
-               for x in match_details['participantIdentities'] 
+               for x in match_details['participantIdentities']
                if self.summonerName in re.sub('[\s+]', '', x['player']['summonerName']).lower()]
-        win_status = [x['stats']['win'] 
-                      for x in match_details['participants'] 
+        win_status = [x['stats']['win']
+                      for x in match_details['participants']
                       if x['participantId'] == pid[0]][0]
 
         self.extract_data['game_id'].append(gameId)
