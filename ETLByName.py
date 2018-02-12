@@ -9,7 +9,7 @@ class ETLByName(object):
         self.accountId = api.get_summoner_by_name(self.summonerName)['accountId']
         self.oldIds = consts.OLD_IDS[consts.OLD_IDS['main_player'] == self.summonerName]['game_id'].tolist()#consts.OLD_IDS.filter(like=summonerName, axis='main_player')['game_id']  ## Don't know why this doesn't work...
         self.gameIds = []
-        self.extract_data = {'game_id': [], 'main_player': [], 'win_status': [], 'team': []}
+        self.extract_data = {'game_id': [], 'main_player': [], 'ranked_status': [], 'win_status': [], 'team': []}
         self.transform_data = {}
 
     def extract(self):
@@ -26,10 +26,9 @@ class ETLByName(object):
             if match_details == None:
                 return 'request fail'
 
-            # Check if ranked game - non-ranked participants are anonymous
-            # TODO: Find out if there is a better way to identify ranked games from the API
-            if match_details['gameMode'] != 'CLASSIC' or len(match_details['teams'][0]['bans']) == 0:
+            if match_details['gameMode'] != 'CLASSIC':
                 return 'skip'
+
         except:
             # print(match_details)
             print('Unexpected error with data checking in _extract_by_gameid:', sys.exc_info()[0])
@@ -42,9 +41,11 @@ class ETLByName(object):
         win_status = [x['stats']['win']
                       for x in match_details['participants']
                       if x['participantId'] == pid[0]][0]
+        ranked_status = len(match_details['teams'][0]['bans']) == 0
 
         self.extract_data['game_id'].append(gameId)
         self.extract_data['win_status'].append(win_status)
+        self.extract_data['ranked_status'].append(ranked_status)
         self.extract_data['main_player'].append(self.summonerName)
         self.extract_data['team'].append(team)
         return 'run'
