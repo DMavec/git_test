@@ -1,6 +1,6 @@
 import pandas as pd
 
-API_KEY = pd.read_csv('data/api_key.txt')
+API_KEY = pd.read_csv('scraper/data/api_key.txt')
 
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',
@@ -51,4 +51,4 @@ SUMMONER_NAMES = [
     #'kkfizzban'
 ]
 
-OLD_IDS = pd.read_csv('data/load_log.csv')
+OLD_IDS = pd.read_csv('scraper/data/load_log.csv')

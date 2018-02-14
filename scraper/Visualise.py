@@ -39,9 +39,9 @@ class Visualise(object):
         df_winrate = (stats[['player1', 'player2', 'pct_wins']]
                       .pivot(index='player1', columns='player2', values='pct_wins')
                       )
-        df_wins.to_csv('data/summary-wins.csv', mode='w')
-        df_games.to_csv('data/summary-number.csv', mode='w')
-        df_winrate.to_csv('data/summary-winrate.csv', mode='w')
+        df_wins.to_csv('scraper/data/summary-wins.csv', mode='w')
+        df_games.to_csv('scraper/data/summary-number.csv', mode='w')
+        df_winrate.to_csv('scraper/data/summary-winrate.csv', mode='w')
 
         # xlabs = dfm.columns.values
         # xpos = np.arange(len(xlabs))

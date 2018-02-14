@@ -15,3 +15,9 @@ class Games(models.Model):
     def __str__(self):
         return self.attribute, self.value
 
+class GameIDs(models.Model):
+    game_id = models.IntegerField()
+    player_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.game_id, self.player_name

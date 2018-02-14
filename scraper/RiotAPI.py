@@ -1,7 +1,10 @@
-import requests
-import constants as consts
-import backoff
 from time import sleep
+
+import backoff
+import requests
+
+from scraper import constants as consts
+
 
 class RiotAPI(object):
     def __init__(self, api_key, region=consts.REGIONS['oceania']):

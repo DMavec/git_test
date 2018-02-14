@@ -1,24 +1,35 @@
-from RiotAPI import RiotAPI
-from ETLByName import ETLByName
-from Visualise import Visualise
-import constants as consts
+import scraper.constants as consts
 import pandas as pd
+from scraper.ETLByName import ETLByName
+from scraper.Visualise import Visualise
+
+from scraper.RiotAPI import RiotAPI
+from scraper.SiteData import SiteData
+
 
 def main():
-    api = RiotAPI(consts.API_KEY)
-    for name in consts.SUMMONER_NAMES:
-        etl = ETLByName(name, api)
-        etl.extract()
-        etl.transform()
-        etl.load('data/game_history.csv')
+    # api = RiotAPI(consts.API_KEY)
+    # for name in consts.SUMMONER_NAMES:
+    #     etl = ETLByName(name, api)
+    #     etl.extract()
+    #     etl.transform()
+    #     etl.load('data/game_history.csv')
+    #
+    # game_history = pd.read_csv('data/game_history.csv')
+    #
+    # viz = Visualise(game_history, consts.SUMMONER_NAMES)
+    # viz.build()
 
-    game_history = pd.read_csv('data/game_history.csv')
+    load_log = pd.read_csv('scraper/data/load_log.csv')
+    load_log['pk'] = load_log['game_id'].astype(str) + load_log['player_name']
 
-    viz = Visualise(game_history, consts.SUMMONER_NAMES)
-    viz.build()
+    site_data = SiteData('site/db.sqlite3')
+    site_data.upsert(src=load_log, dest='stats_gameids', pk='game_id || player_name')
+
 
 if __name__ == "__main__":
     main()
+
 
 ## Data check - post-realising we were pulling non-matched games
 # games = [api.get_match(game_id) for game_id in game_history['game_id'].unique()]
