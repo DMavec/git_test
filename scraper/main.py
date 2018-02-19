@@ -1,30 +1,30 @@
 import scraper.constants as consts
 import pandas as pd
-from scraper.ETLByName import ETLByName
-from scraper.Visualise import Visualise
+from scraper.HistoryExtractor import HistoryExtractor
+from scraper.SiteDataTransformer import SiteDataTransformer
 
 from scraper.RiotAPI import RiotAPI
-from scraper.SiteData import SiteData
+from scraper.SiteDataLoader import SiteDataLoader
 
 
 def main():
-    # api = RiotAPI(consts.API_KEY)
-    # for name in consts.SUMMONER_NAMES:
-    #     etl = ETLByName(name, api)
-    #     etl.extract()
-    #     etl.transform()
-    #     etl.load('data/game_history.csv')
-    #
-    # game_history = pd.read_csv('data/game_history.csv')
-    #
-    # viz = Visualise(game_history, consts.SUMMONER_NAMES)
-    # viz.build()
+    api = RiotAPI(consts.API_KEY)
+    hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
+    hist.extract()
+    hist.load('scraper/data/game_records.csv')
 
-    load_log = pd.read_csv('scraper/data/load_log.csv')
-    load_log['pk'] = load_log['game_id'].astype(str) + load_log['player_name']
+    # transformer = SiteDataTransformer(game_history, consts.SUMMONER_NAMES)
+    # transformer.build()
 
-    site_data = SiteData('site/db.sqlite3')
-    site_data.upsert(src=load_log, dest='stats_gameids', pk='game_id || player_name')
+    game_records = pd.read_csv('scraper/data/game_records.csv')
+    game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
+
+    game_log = pd.read_csv('scraper/data/game_log.csv')
+    game_log['pk'] = game_log['game_id'].astype(str) + game_log['player_name']
+
+    site_data_loader = SiteDataLoader('site/db.sqlite3')
+    site_data_loader.upsert(src=game_log, dest='stats_gameplayerrelationship', pk='game_id || player_name')
+    site_data_loader.upsert(src=game_records, dest='stats_game', pk='game_id || attr')
 
 
 if __name__ == "__main__":
