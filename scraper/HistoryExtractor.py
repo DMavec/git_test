@@ -1,4 +1,5 @@
-import os, re, sys
+import re
+import sys
 import pandas as pd
 from scraper import constants as consts
 
@@ -21,7 +22,7 @@ class HistoryExtractor(object):
                          in match_history
                          if match['gameId'] not in self.old_ids]
 
-        ## Used for running historical "catch-up" - should only be required once after migrating
+        # # Used for running historical "catch-up" - should only be required once after migrating
         # self.game_ids = self.old_ids
 
         self.game_ids = pd.Series(self.game_ids).drop_duplicates().tolist()
@@ -29,29 +30,28 @@ class HistoryExtractor(object):
         if len(self.game_ids) == 0:
             return 'No new data'
         else:
-            [self._extract_by_gameid(gameId) for gameId in self.game_ids]
+            [self._extract_by_game_id(gameId) for gameId in self.game_ids]
             self.load_data = pd.DataFrame.from_dict(self.extract_data). \
                 reindex(columns=['game_id', 'attribute', 'value'])
 
-    def _extract_by_gameid(self, gameId):
-        match_details = self.api.get_match(gameId)
+    def _extract_by_game_id(self, game_id):
+        match_details = self.api.get_match(game_id)
         try:
-            if match_details == None:
+            if match_details is None:
                 return 'request fail'
 
             if match_details['gameMode'] != 'CLASSIC':
                 return 'skip'
-
         except:
             # print(match_details)
-            print('Unexpected error with data checking in _extract_by_gameid:', sys.exc_info()[0])
+            print('Unexpected error with data checking in _extract_by_game_id:', sys.exc_info()[0])
 
         players = [re.sub('[\s+]', '', participantIdentity['player']['summonerName']).lower()
                    for participantIdentity
                    in match_details['participantIdentities']]
         team = [player for player in players if player in self.summoner_names]
 
-        # Identify which participant id matches the summoner name
+        # # Identify which participant id matches the summoner name
         pid = [participantIdentity['participantId']
                for participantIdentity
                in match_details['participantIdentities']
@@ -66,9 +66,9 @@ class HistoryExtractor(object):
         data_value = team
 
         data_attribute.extend(['game_outcome', 'ranked_status'])
-        data_value.extend([win_status, ranked_status])
+        data_value.extend([str(win_status), str(ranked_status)])
 
-        self.extract_data['game_id'].extend([gameId] * len(data_attribute))
+        self.extract_data['game_id'].extend([game_id] * len(data_attribute))
         self.extract_data['attribute'].extend(data_attribute)
         self.extract_data['value'].extend(data_value)
 
