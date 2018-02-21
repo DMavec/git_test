@@ -2,7 +2,89 @@
 
 {% block title %}
 <title>League Stats</title>
-<a class="navbar-brand" href="index.html">League Stats</a>
+<div class="navbar-brand">League Stats</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Player
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for player in players %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'stats:player_stats' player %}">
+                            {{ player }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Player
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for player in players %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'stats:player_stats' player %}">
+                            {{ player }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Player
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for player in players %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'stats:player_stats' player %}">
+                            {{ player }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block chart_scripts %}
+<script type="text/javascript">
+    var bar_labels = {{ bar_data|safe }};
+
+    var barChartData = {
+        labels: bar_labels.players,
+        datasets: [{
+            label: 'Win Rate',
+            backgroundColor: "rgba(19, 15, 64,1.0)",
+            data: bar_labels.winrate
+        }]
+    };
+
+    var ctx = document.getElementById("winRateBarChart").getContext("2d");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: barChartData
+        });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -15,17 +97,48 @@
           </li>
           <li class="breadcrumb-item active">Charts</li>
         </ol>-->
-        <!-- Area Chart Example-->
+        <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                <i class="fa fa-area-chart"></i> Area Chart Example
+                <i class="fa fa-table"></i> All Player Stats
             </div>
             <div class="card-body">
-                <canvas id="myAreaChart" width="100%" height="30"></canvas>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Games</th>
+                            <th>Wins</th>
+                            <th>Win Rate</th>
+                        </tr>
+                        </thead>
+                        <!--<tfoot>
+                             <tr>
+                                 <th>Name</th>
+                                 <th>Position</th>
+                                 <th>Office</th>
+                                 <th>Age</th>
+                                 <th>Start date</th>
+                                 <th>Salary</th>
+                             </tr>
+                        </tfoot>-->
+                        {% for summary_stat in summary_stats %}
+                        <tr>
+                            <td>{{ summary_stat.player_name }}</td>
+                            <td>{{ summary_stat.games }}</td>
+                            <td>{{ summary_stat.wins }}</td>
+                            <td>{{ summary_stat.win_rate }}</td>
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
-        <div class="row">
+
+          <div class="row">
             <div class="col-lg-8">
                 <!-- Example Bar Chart Card-->
                 <div class="card mb-3">
@@ -33,7 +146,7 @@
                         <i class="fa fa-bar-chart"></i> Bar Chart Example
                     </div>
                     <div class="card-body">
-                        <canvas id="myBarChart" width="100" height="50"></canvas>
+                        <canvas id="winRateBarChart" width="100" height="50"></canvas>
                     </div>
                     <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
@@ -51,7 +164,18 @@
                 </div>
             </div>
         </div>
+              <!-- Area Chart Example-->
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-area-chart"></i> Area Chart Example
+            </div>
+            <div class="card-body">
+                <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
     </div>
-    <!-- /.container-fluid-->
-    <!-- /.content-wrapper-->
+</div>
+<!-- /.container-fluid-->
+<!-- /.content-wrapper-->
 {% endblock %}

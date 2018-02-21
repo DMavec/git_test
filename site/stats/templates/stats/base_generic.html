@@ -14,6 +14,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'stats/css/font-awesome/css/font-awesome.min.css' %}"/>
     <!-- Custom styles for this template-->
     <link rel="stylesheet" type="text/css" href="{% static 'stats/css/sb-admin.css' %}"/>
+
+    {% block extrahead %}
+    {% endblock %}
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -24,6 +27,7 @@
     <title>Local Library</title>
     <a class="navbar-brand" href="index.html">League Stats</a>
     {% endblock %}
+
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
             data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -31,19 +35,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Player
-                </button>
-
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {% for player in player_list %}
-                    <li><a class="dropdown-item" href="{% url 'stats:player_stats' player.player_name %}">{{
-                        player.player_name }}</a></li>
-                    {% endfor %}
-                </div>
-            </div>
             <!--<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
               <a class="nav-link" href="index.html">
                 <i class="fa fa-fw fa-dashboard"></i>
@@ -239,8 +230,10 @@
     </div>
 </nav>
 {% endblock %}
+
 {% block content %}
 {% endblock %}
+
 {% block footer %}
 <footer class="sticky-footer">
     <div class="container">
@@ -273,24 +266,27 @@
    </div>
  </div>-->
 <!-- Bootstrap core JavaScript-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-feJI7QwhOS+hwpX2zkaeJQjeiwlhOP+SdQDqhgvvo1DsjtiSQByFdThsxO669S2D"
+        crossorigin="anonymous"></script>
 <!-- Core plugin JavaScript-->
-<script src="{% static 'stats/js/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"
+        integrity="sha256-H3cjtrm/ztDeuhCN9I4yh4iN2Ybx/y1RM7rMmAesA0k="
+        crossorigin="anonymous"></script>
 <!-- Page level plugin JavaScript-->
-<script src="{% static 'stats/js/chart.js/Chart.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"
+        integrity="sha256-N4u5BjTLNwmGul6RgLoESPNqDFVUibVuOYhP4gJgrew="
+        crossorigin="anonymous"></script>
 <!-- Custom scripts for all pages-->
 <script src="{% static 'stats/js/sb-admin.min.js' %}"></script>
 <!-- Custom scripts for this page-->
 <script src="{% static 'stats/js/sb-admin-charts.min.js' %}"></script>
-</div>
+{% block chart_scripts %}
+{% endblock %}
 </body>
 
 </html>
