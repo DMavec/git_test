@@ -22,11 +22,11 @@ class RiotAPI(object):
                 args[key] = value
 
         print(consts.URL['base'].format(
-                proxy=self.region,
-                static='static-data/' if static else '',
-                region=self.region,
-                url=api_url
-            ))
+            proxy=self.region,
+            static='static-data/' if static else '',
+            region=self.region,
+            url=api_url
+        ))
 
         retries = 1
         while 0 < retries < 5:

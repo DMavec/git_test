@@ -2,6 +2,7 @@ import sqlite3 as lite
 import sys
 import pandas as pd
 
+
 class SiteDataLoader(object):
     def __init__(self, db_path):
         self.db_path = db_path
@@ -36,12 +37,11 @@ class SiteDataLoader(object):
 
     def upsert(self, src, dest, pk):
         self.query("SELECT DISTINCT {} as pk FROM {}".format(pk, dest))
-        #print(self.result_set)
+        # print(self.result_set)
 
         src.drop_duplicates('pk', keep='last', inplace=True)
         delta = pd.merge(src, self.result_set, how='left', on='pk', indicator=True)
         delta = delta[delta['_merge'] == 'left_only']
         delta.drop(['_merge', 'pk'], axis=1, inplace=True)
         self.insert_data(delta, dest)
-        #print(delta)
-
+        # print(delta)

@@ -30,7 +30,7 @@ class HistoryExtractor(object):
             return 'No new data'
         else:
             [self._extract_by_gameid(gameId) for gameId in self.game_ids]
-            self.load_data = pd.DataFrame.from_dict(self.extract_data).\
+            self.load_data = pd.DataFrame.from_dict(self.extract_data). \
                 reindex(columns=['game_id', 'attribute', 'value'])
 
     def _extract_by_gameid(self, gameId):
@@ -76,11 +76,10 @@ class HistoryExtractor(object):
 
     def load(self, file_name):
         if len(self.load_data) > 0:
-            game_log = self.load_data[self.load_data.attribute.str.contains('player[0-9]?')].\
+            game_log = self.load_data[self.load_data.attribute.str.contains('player[0-9]?')]. \
                 filter(['game_id', 'value'])
 
             pd.DataFrame.to_csv(self.load_data, file_name,
                                 mode='a', header=False, index=False, encoding='utf-8')
             pd.DataFrame.to_csv(game_log, 'scraper/data/game_log.csv',
                                 mode='a', header=False, index=False, encoding='utf-8')
-
