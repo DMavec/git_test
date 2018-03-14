@@ -8,23 +8,36 @@ from scraper.SiteDataLoader import SiteDataLoader
 
 
 def main():
-    api = RiotAPI(consts.API_KEY)
-    hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
-    hist.extract()
-    hist.load('scraper/data/game_records.csv')
+    # api = RiotAPI(consts.API_KEY)
+    # hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
+    # hist.extract()
+    # hist.load('scraper/data/game_records.csv')
 
     # transformer = SiteDataTransformer(game_history, consts.SUMMONER_NAMES)
     # transformer.build()
 
-    game_records = pd.read_csv('scraper/data/game_records.csv')
-    game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
+    site_data_loader = SiteDataLoader('site/db.sqlite3')
 
     game_log = pd.read_csv('scraper/data/game_log.csv')
-    game_log['pk'] = game_log['game_id'].astype(str) + game_log['player_name']
 
-    site_data_loader = SiteDataLoader('site/db.sqlite3')
-    site_data_loader.upsert(src=game_log, dest='stats_gameplayerrelationship', pk='game_id || player_name')
-    site_data_loader.upsert(src=game_records, dest='stats_game', pk='game_id || attr')
+    # Game Identifier
+    games = pd.DataFrame({'game_id': game_log['game_id'].unique()})
+    games['pk'] = games['game_id']
+    site_data_loader.upsert(src=games, dest='stats_game', pk='game_id')
+
+    # Game - Player Relationship
+    site_data_loader.query('SELECT * FROM stats_player')
+    player_lkup = site_data_loader.result_set
+    game_log = game_log.join(player_lkup.set_index('player_name'), how='inner', on='player_name').\
+        rename(columns={'id': 'player_id'}).\
+        drop('player_name', axis=1)
+    game_log['pk'] = game_log['game_id'].astype(str) + '_' + game_log['player_id'].astype(str)
+    site_data_loader.upsert(src=game_log, dest='stats_gameplayerrelationship', pk='game_id || \'_\' || player_id')
+
+    # Game Data
+    # game_records = pd.read_csv('scraper/data/game_records.csv')
+    # game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
+    # site_data_loader.upsert(src=game_records, dest='stats_gameattribute', pk='game_id || attr')
 
 
 if __name__ == "__main__":
