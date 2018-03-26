@@ -15,6 +15,7 @@
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="{% static 'stats/css/sb-admin.css' %}" rel="stylesheet" type="text/css">
+
     {% block extrahead %}
     {% endblock %}
 </head>
@@ -285,6 +286,14 @@
 <script src="{% static 'stats/js/sb-admin.min.js' %}"></script>
 <!-- Custom scripts for this page-->
 <script src="{% static 'stats/js/sb-admin-charts.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(".dropdown-menu li a").click(function(){
+
+          $(".btn:first-child").html($(this).text()+' <span class="caret"></span>');
+
+        });
+    </script>
 {% block chart_scripts %}
 {% endblock %}
 </body>

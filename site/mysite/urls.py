@@ -21,4 +21,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('stats/', include('stats.urls')),
     path('admin/', admin.site.urls),
+    path(r'^api-auth/', include('rest_framework.urls'))
 ]
