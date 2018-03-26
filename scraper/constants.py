@@ -33,10 +33,9 @@ SUMMONER_NAMES = [
     'dicedstk',
     'endgamedos',
     'loui9sdstk',
+    '2dmin'
 
-    # '2dmin',
     # 'pangryanda',
-    # 'menelaus',
     # 'ridethellama',
     # 'orangu',
     # 'shaarcer',
@@ -51,4 +50,4 @@ SUMMONER_NAMES = [
     # 'kkfizzban'
 ]
 
-OLD_IDS = pd.read_csv('scraper/data/game_log.csv')
+OLD_IDS = pd.read_csv('scraper/data/old_ids.csv')

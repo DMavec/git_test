@@ -14,16 +14,17 @@ class HistoryExtractor(object):
         self.extract_data = {'game_id': [], 'attribute': [], 'value': []}
         self.load_data = pd.DataFrame()
 
-    def extract(self):
-        self.game_ids = [match['gameId']
-                         for match_history
-                         in [self.api.get_recent_matches(account_id)['matches'] for account_id in self.account_ids]
-                         for match
-                         in match_history
-                         if match['gameId'] not in self.old_ids]
-
-        # # Used for running historical "catch-up" - should only be required once after migrating
-        # self.game_ids = self.old_ids
+    def extract(self, full_load=False):
+        if full_load:
+            # Used for running historical "catch-up" - should only be required once after migrating
+            self.game_ids = self.old_ids
+        else:
+            self.game_ids = [match['gameId']
+                             for match_history
+                             in [self.api.get_recent_matches(account_id)['matches'] for account_id in self.account_ids]
+                             for match
+                             in match_history
+                             if match['gameId'] not in self.old_ids]
 
         self.game_ids = pd.Series(self.game_ids).drop_duplicates().tolist()
 
@@ -60,7 +61,7 @@ class HistoryExtractor(object):
         win_status = int([x['stats']['win']
                           for x in match_details['participants']
                           if x['participantId'] == pid[0]][0])
-        ranked_status = int(len(match_details['teams'][0]['bans']) == 0)
+        ranked_status = int(len(match_details['teams'][0]['bans']) > 0)
 
         data_attribute = ['player' + str(x) for x in list(range(0, len(team)))]
         data_value = team

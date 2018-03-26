@@ -8,10 +8,10 @@ from scraper.SiteDataLoader import SiteDataLoader
 
 
 def main():
-    # api = RiotAPI(consts.API_KEY)
-    # hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
-    # hist.extract()
-    # hist.load('scraper/data/game_records.csv')
+    api = RiotAPI(consts.API_KEY)
+    hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
+    hist.extract(full_load=False)
+    hist.load('scraper/data/game_records.csv')
 
     # transformer = SiteDataTransformer(game_history, consts.SUMMONER_NAMES)
     # transformer.build()
@@ -35,9 +35,9 @@ def main():
     site_data_loader.upsert(src=game_log, dest='stats_gameplayerrelationship', pk='game_id || \'_\' || player_id')
 
     # Game Data
-    # game_records = pd.read_csv('scraper/data/game_records.csv')
-    # game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
-    # site_data_loader.upsert(src=game_records, dest='stats_gameattribute', pk='game_id || attr')
+    game_records = pd.read_csv('scraper/data/game_records.csv')
+    game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
+    site_data_loader.upsert(src=game_records, dest='stats_gameattribute', pk='game_id || attr')
 
 
 if __name__ == "__main__":
