@@ -13,6 +13,7 @@ class HistoryExtractor(object):
         self.game_ids = []
         self.extract_data = {'game_id': [], 'attribute': [], 'value': []}
         self.load_data = pd.DataFrame()
+        self.game_log = []
 
     def extract(self, full_load=False):
         if full_load:
@@ -84,3 +85,5 @@ class HistoryExtractor(object):
                                 mode='a', header=False, index=False, encoding='utf-8')
             pd.DataFrame.to_csv(game_log, 'scraper/data/game_log.csv',
                                 mode='a', header=False, index=False, encoding='utf-8')
+
+            self.game_log = pd.read_csv('scraper/data/game_log.csv')

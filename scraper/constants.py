@@ -31,10 +31,10 @@ SUMMONER_NAMES = [
     'skandaras',
     'menelaus34',
     'dicedstk',
-    'endgamedos',
     'loui9sdstk',
-    '2dmin'
 
+    # 'endgamedos',
+    # '2dmin'
     # 'pangryanda',
     # 'ridethellama',
     # 'orangu',
@@ -51,3 +51,4 @@ SUMMONER_NAMES = [
 ]
 
 OLD_IDS = pd.read_csv('scraper/data/old_ids.csv')
+OLD_IDS = OLD_IDS[OLD_IDS.player_name.isin(SUMMONER_NAMES)]
