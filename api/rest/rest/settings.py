@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
 # CORS settings
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
-    'https://dariomavec.github.io/strife'
+    'dariomavec.github.io'
 )
 
 # print("base dir path", BASE_DIR)
