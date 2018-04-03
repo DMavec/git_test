@@ -119,7 +119,9 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
 # REST settings
 # http://www.django-rest-framework.org/api-guide/settings/
 
@@ -134,4 +136,4 @@ CORS_ORIGIN_WHITELIST = (
     'https://dariomavec.github.io/'
 )
 
-print("base dir path", BASE_DIR)
+# print("base dir path", BASE_DIR)
