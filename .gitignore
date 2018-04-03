@@ -1,5 +1,5 @@
 # Postgres temp
-api/rest/data/pg_stat_tmp/
+api/rest/data/
 
 # PyCharm Settings
 ?idea/
