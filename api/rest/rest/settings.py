@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#s%o3sdr(%+i0^493_x_7=%x=+&_vdn5+nl!==(90z2drnv-zb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'mavec.pythonanywhere.com'
@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
 # CORS settings
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
-    'https://dariomavec.github.io/'
+    'https://dariomavec.github.io/strife'
 )
 
 # print("base dir path", BASE_DIR)
