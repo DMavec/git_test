@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q, F, FloatField, Count, Sum, IntegerField, Window, RowRange, Value, DecimalField
+from django.db.models import Q, F, FloatField, Count, Sum, IntegerField, Value, DecimalField
 from django.db.models.functions import Cast, Upper, Lower, Substr, Concat
 
 
