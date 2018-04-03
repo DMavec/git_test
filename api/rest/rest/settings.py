@@ -133,3 +133,5 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     'https://dariomavec.github.io/'
 )
+
+print("base dir path", BASE_DIR)
