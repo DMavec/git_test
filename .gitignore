@@ -1,3 +1,6 @@
+# Postgres temp
+api/rest/data/pg_stat_tmp/
+
 # PyCharm Settings
 ?idea/
 __pycache__/
