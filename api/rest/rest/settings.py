@@ -24,7 +24,9 @@ SECRET_KEY = '#s%o3sdr(%+i0^493_x_7=%x=+&_vdn5+nl!==(90z2drnv-zb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'mavec.pythonanywhere.com'
+]
 
 # Application definition
 
@@ -128,4 +130,5 @@ REST_FRAMEWORK = {
 # CORS settings
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
+    'https://dariomavec.github.io/'
 )
