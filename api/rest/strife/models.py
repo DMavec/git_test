@@ -3,7 +3,7 @@ from django.db.models import Q, F, FloatField, Count, Sum, IntegerField, Window,
 from django.db.models.functions import Cast, Upper, Lower, Substr, Concat
 
 
-class PlayerSet(models.QuerySet):
+class PlayerManager(models.QuerySet):
     def add_n_wins(self):
         return self.annotate(
             n_wins=Count('gameplayerrelationship__game__gameattribute',
@@ -46,7 +46,7 @@ class PlayerSet(models.QuerySet):
 class Player(models.Model):
     player_name = models.CharField(max_length=200)
 
-    objects = PlayerSet.as_manager()
+    objects = PlayerManager.as_manager()
 
     def __str__(self):
         return self.player_name
@@ -55,16 +55,17 @@ class Player(models.Model):
 class GameSet(models.QuerySet):
     def add_n_wins(self):
         return self.annotate(
-            # n_wins=Window(
-            #     expression=Sum(Cast(F('gameattribute__val'), IntegerField()),
-            #                    filter=Q(gameattribute__attr='game_outcome')),
-            #     partition_by=['gameplayerrelationship__player'],
-            #     order_by=['game_id'],
-            #     frame=RowRange(start=-10, end=1)
-            # )
             n_wins=Sum(Cast(F('gameattribute__val'), IntegerField()),
                        filter=Q(gameattribute__attr='game_outcome'))
         )
+
+        # n_wins=Window(
+        #     expression=Sum(Cast(F('gameattribute__val'), IntegerField()),
+        #                    filter=Q(gameattribute__attr='game_outcome')),
+        #     partition_by=['gameplayerrelationship__player'],
+        #     order_by=['game_id'],
+        #     frame=RowRange(start=-10, end=1)
+        # )
 
         # def add_player(self):
         #     return self.annotate(
