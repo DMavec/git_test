@@ -25,6 +25,7 @@ SECRET_KEY = '#s%o3sdr(%+i0^493_x_7=%x=+&_vdn5+nl!==(90z2drnv-zb'
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'localhost',
     'mavec.pythonanywhere.com'
 ]
 
@@ -120,7 +121,6 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'rest/static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-
     ]
 # REST settings
 # http://www.django-rest-framework.org/api-guide/settings/
