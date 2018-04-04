@@ -1,4 +1,4 @@
-cd /home/mavec/riot_project/
+cd /home/mavec/riot_project/scraper/
 git pull
 
 python3.6 main.py
