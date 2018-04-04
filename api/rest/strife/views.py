@@ -23,6 +23,7 @@ class PlayerViewSet(viewsets.ReadOnlyModelViewSet):
             add_n_games(). \
             add_pct_win(). \
             add_n_ranked(). \
+            add_n_unranked(). \
             order_by('-pct_win'). \
             add_player_tidy()
 
