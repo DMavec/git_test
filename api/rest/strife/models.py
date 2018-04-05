@@ -93,9 +93,19 @@ class GameAttribute(models.Model):
         return template.format(self)
 
 
+class GamePlayerRelationshipSet(models.QuerySet):
+    def add_n_wins(self):
+        return self.annotate(
+            n_wins=Sum(Cast(F('game__gameattribute__val'), IntegerField()),
+                       filter=Q(game__gameattribute__attr='game_outcome'))
+        )
+
+
 class GamePlayerRelationship(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
+
+    objects = GamePlayerRelationshipSet.as_manager()
 
     def __str__(self):
         return self.game, self.player

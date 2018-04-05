@@ -1,12 +1,14 @@
 # Models
-from strife.models import Player, Game
+from strife.models import Player, Game, GamePlayerRelationship
 from django.contrib.auth.models import User
 # Serializers
 from strife.serializers import PlayerSerializer, UserSerializer, GameSerializer
 # Permissions
 # from strife.permissions import
 # Rest Framework
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 
 
 class PlayerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,14 +34,16 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     """
     This viewset automatically provides `list` and `detail` actions.
     """
-    queryset = Game.objects.all()
+    queryset = GamePlayerRelationship.objects.all()
     serializer_class = GameSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('player__player_name', )
 
     def get_queryset(self):
-        return Game.objects. \
+        return GamePlayerRelationship.objects. \
             add_n_wins(). \
-            order_by('game_id')
+            order_by('player_id', 'game_id')
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
