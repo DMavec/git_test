@@ -14,5 +14,5 @@ router.register(r'games', views.GameViewSet)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     url(r'^schema/$', schema_view),
-    url(r'^', include(router.urls)),
+    url(r'^', include(router.urls))
 ]

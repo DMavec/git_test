@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from strife.models import Player, Game
+from strife.models import Player, Game, GamePlayerRelationship
 from django.contrib.auth.models import User
 
 
@@ -25,7 +25,8 @@ class PlayerSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField()
     n_wins = serializers.IntegerField()
+    player = serializers.CharField()
 
     class Meta:
-        model = Game
-        fields = ('game_id', 'n_wins')
+        model = GamePlayerRelationship
+        fields = ('player', 'game_id', 'n_wins')
