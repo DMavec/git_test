@@ -1,3 +1,7 @@
+import os
+if os.getcwd().endswith('riot_project'):
+    os.chdir('scraper')
+
 import pandas as pd
 
 import constants as consts
