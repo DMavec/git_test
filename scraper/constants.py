@@ -1,6 +1,6 @@
 import pandas as pd
 
-API_KEY = pd.read_csv('scraper/data/api_key.txt')
+API_KEY = pd.read_csv('data/api_key.txt')
 
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',
