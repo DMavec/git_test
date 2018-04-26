@@ -50,5 +50,5 @@ SUMMONER_NAMES = [
     # 'kkfizzban'
 ]
 
-OLD_IDS = pd.read_csv('data/old_ids.csv')
+OLD_IDS = pd.read_csv('data/game_log.csv')
 OLD_IDS = OLD_IDS[OLD_IDS.player_name.isin(SUMMONER_NAMES)]
