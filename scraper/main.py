@@ -1,8 +1,8 @@
-import scraper.constants as consts
+import constants as consts
 import pandas as pd
-from scraper.HistoryExtractor import HistoryExtractor
-from scraper.RiotAPI import RiotAPI
-from scraper.SiteDataLoader import SiteDataLoader
+from HistoryExtractor import HistoryExtractor
+from RiotAPI import RiotAPI
+from SiteDataLoader import SiteDataLoader
 
 
 def main():
