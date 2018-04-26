@@ -1,7 +1,7 @@
 import re
 import sys
 import pandas as pd
-import scraper.constants as consts
+import constants as consts
 
 
 class HistoryExtractor(object):
@@ -84,8 +84,8 @@ class HistoryExtractor(object):
 
             pd.DataFrame.to_csv(self.load_data, file_name,
                                 mode='a', header=False, index=False, encoding='utf-8')
-            pd.DataFrame.to_csv(game_log, 'scraper/data/game_log.csv',
+            pd.DataFrame.to_csv(game_log, 'data/game_log.csv',
                                 mode='a', header=False, index=False, encoding='utf-8')
 
-            self.game_log = pd.read_csv('scraper/data/game_log.csv')
+            self.game_log = pd.read_csv('data/game_log.csv')
             self.new_data = True

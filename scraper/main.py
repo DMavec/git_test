@@ -1,16 +1,16 @@
 import pandas as pd
 
-import scraper.constants as consts
-from scraper.HistoryExtractor import HistoryExtractor
-from scraper.RiotAPI import RiotAPI
-from scraper.SiteDataLoader import SiteDataLoader
+import constants as consts
+from HistoryExtractor import HistoryExtractor
+from RiotAPI import RiotAPI
+from SiteDataLoader import SiteDataLoader
 
 
 def main():
     api = RiotAPI(consts.API_KEY)
     hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
     hist.extract(full_load=False)
-    hist.load('scraper/data/game_records.csv')
+    hist.load('data/game_records.csv')
 
     # Class for loading data into the site database
     loader = SiteDataLoader('api/rest/db.sqlite3')
@@ -31,7 +31,7 @@ def main():
         loader.upsert(src=game_log, dest='strife_gameplayerrelationship', pk='game_id || \'_\' || player_id')
 
         # Game Data
-        game_records = pd.read_csv('scraper/data/game_records.csv')
+        game_records = pd.read_csv('data/game_records.csv')
         game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
         loader.upsert(src=game_records, dest='strife_gameattribute', pk='game_id || attr')
     else:

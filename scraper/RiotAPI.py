@@ -3,7 +3,7 @@ from time import sleep
 import backoff
 import requests
 
-import scraper.constants as consts
+import constants as consts
 
 
 class RiotAPI(object):
