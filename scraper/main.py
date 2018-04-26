@@ -12,7 +12,7 @@ def main():
     hist.load('data/game_records.csv')
 
     # Class for loading data into the site database
-    loader = SiteDataLoader('api/rest/db.sqlite3')
+    loader = SiteDataLoader('../api/rest/db.sqlite3')
 
     # Game Identifier
     games = pd.DataFrame({'game_id': hist.game_log['game_id'].unique()})
