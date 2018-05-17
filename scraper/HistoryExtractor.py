@@ -28,7 +28,7 @@ class HistoryExtractor(object):
             # Used for running historical "catch-up" - should only be required once after migrating
             self.game_ids = self.old_ids
         else:
-            self.game_ids = [_extract_timestamp_return_gameid(match)
+            self.game_ids = [self._extract_timestamp_return_gameid(match)
                              for match_history
                              in [self.api.get_recent_matches(account_id)['matches'] for account_id in self.account_ids]
                              for match
