@@ -55,10 +55,11 @@ class RiotAPI(object):
         )
         return self._request(api_url)
 
-    def get_recent_matches(self, id):
+    def get_recent_matches(self, id, begin_index=0):
         api_url = consts.URL['match-recent'].format(
             version=consts.API_VERSIONS['match'],
-            id=id
+            id=id,
+            begin_index=begin_index
         )
         return self._request(api_url)
 

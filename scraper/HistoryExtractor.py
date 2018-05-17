@@ -18,9 +18,10 @@ class HistoryExtractor(object):
         self.new_data = False
 
     def _extract_timestamp_return_gameid(self, match):
-        self.extract_data['game_id'] += [match['gameId']]
-        self.extract_data['attribute'] += ['timestamp']
-        self.extract_data['value'] += [match['timestamp']]
+        if not match['gameId'] in self.extract_data['game_id']:
+            self.extract_data['game_id'] += [match['gameId']]
+            self.extract_data['attribute'] += ['timestamp']
+            self.extract_data['value'] += [match['timestamp']]
 
         return match['gameId']
 
@@ -42,8 +43,8 @@ class HistoryExtractor(object):
             return 'No new data'
         else:
             [self._extract_by_game_id(gameId) for gameId in self.game_ids]
-            self.load_data = pd.DataFrame.from_dict(self.extract_data). \
-                reindex(columns=['game_id', 'attribute', 'value'])
+            self.load_data = pd.DataFrame(self.extract_data). \
+                reindex(columns=['game_id', 'attribute', 'value']).drop_duplicates()
 
     def _extract_by_game_id(self, game_id):
         match_details = self.api.get_match(game_id)

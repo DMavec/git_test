@@ -7,7 +7,7 @@ URL = {
     'summoner_by_name': 'summoner/v{version}/summoners/by-name/{names}',
     'game': 'v{version}/game/by-summoner/{id}/recent',
     'lol-static-data': 'v{version}/{end_url}',
-    'match-recent': 'match/v{version}/matchlists/by-account/{id}',
+    'match-recent': 'match/v{version}/matchlists/by-account/{id}?beginIndex={begin_index}',
     'match': 'match/v{version}/matches/{id}'
 }
 
