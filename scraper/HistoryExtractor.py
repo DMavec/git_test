@@ -29,6 +29,7 @@ class HistoryExtractor(object):
         if full_load:
             for account_id in self.account_ids:
                 start_index = 0
+                n_records = 1
                 while n_records > 0:
                     match_history = self.api.get_recent_matches(account_id, start_index)['matches']
                     n_records = len(match_history)
