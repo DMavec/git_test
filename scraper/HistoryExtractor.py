@@ -79,7 +79,7 @@ class HistoryExtractor(object):
         data_value.extend([str(win_status), str(ranked_status)])
 
         self.extract_data['game_id'] += [game_id] * len(data_attribute)
-        self.extract_data['attribute'] + = data_attribute
+        self.extract_data['attribute'] += data_attribute
         self.extract_data['value'] += data_value
 
         return 'run'
