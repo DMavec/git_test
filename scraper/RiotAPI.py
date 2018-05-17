@@ -39,7 +39,6 @@ class RiotAPI(object):
                 ),
                 params=args
             )
-            print(response)
 
             if 'status' in response.json().keys():
                 retries += 1
