@@ -27,8 +27,14 @@ class HistoryExtractor(object):
 
     def extract(self, full_load=False):
         if full_load:
-            # Used for running historical "catch-up" - should only be required once after migrating
-            self.game_ids = self.old_ids
+            for account_id in self.account_ids:
+                start_index = 0
+                while n_records > 0:
+                    match_history = self.api.get_recent_matches(account_id, start_index)['matches']
+                    n_records = len(match_history)
+                    self.game_ids += [_extract_timestamp_return_gameid(match) for match in matches]
+                    start_index += 100
+
         else:
             self.game_ids = [self._extract_timestamp_return_gameid(match)
                              for match_history
