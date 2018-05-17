@@ -5,9 +5,9 @@ API_KEY = pd.read_csv('data/api_key.txt')
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',
     'summoner_by_name': 'summoner/v{version}/summoners/by-name/{names}',
-    'game': 'v{version}/game/by-summoner/{id}',
+    'game': 'v{version}/game/by-summoner/{id}/recent',
     'lol-static-data': 'v{version}/{end_url}',
-    'match-recent': 'match/v{version}/matchlists/by-account/{id}/recent',
+    'match-recent': 'match/v{version}/matchlists/by-account/{id}',
     'match': 'match/v{version}/matches/{id}'
 }
 
