@@ -33,7 +33,7 @@ class HistoryExtractor(object):
                 while n_records > 0:
                     match_history = self.api.get_recent_matches(account_id, start_index)['matches']
                     n_records = len(match_history)
-                    self.game_ids += [self._extract_timestamp_return_gameid(match) for match in matches]
+                    self.game_ids += [self._extract_timestamp_return_gameid(match) for match in match_history]
                     start_index += 100
 
         else:
