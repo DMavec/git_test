@@ -17,9 +17,9 @@ class HistoryExtractor(object):
         self.new_data = False
 
     def _extract_timestamp_return_gameid(self, match):
-        self.extract_data['game_id'].push(match['gameId'])
-        self.extract_data['attribute'].push('timestamp')
-        self.extract_data['value'].push(match['timestamp'])
+        self.extract_data['game_id'].extend(match['gameId'])
+        self.extract_data['attribute'].extend('timestamp')
+        self.extract_data['value'].extend(match['timestamp'])
 
         return match['gameId']
 
