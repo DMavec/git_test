@@ -11,6 +11,7 @@ class HistoryExtractor(object):
         self.account_ids = [api.get_summoner_by_name(name)['accountId'] for name in self.summoner_names]
         self.old_ids = consts.OLD_IDS.drop_duplicates('game_id', keep='last')['game_id'].tolist()
         self.game_ids = []
+        self.skipped_ids = []
         self.extract_data = {'game_id': [], 'attribute': [], 'value': []}
         self.load_data = pd.DataFrame()
         self.game_log = []
@@ -51,6 +52,7 @@ class HistoryExtractor(object):
                 return 'request fail'
 
             if match_details['gameMode'] != 'CLASSIC':
+                self.skipped_ids += [game_id]
                 return 'skip'
         except:
             # print(match_details)
@@ -88,6 +90,10 @@ class HistoryExtractor(object):
         if len(self.load_data) > 0:
             game_log = (self.load_data[self.load_data.attribute.str.contains('player[0-9]?')]
                             .filter(['game_id', 'value']))
+            skipped_log = pd.DataFrame({'game_id': self.skipped_ids,
+                                        'value': [''] * len(self.skipped_ids)})
+            game_log = pd.concat(game_log, skipped_log)
+
 
             pd.DataFrame.to_csv(self.load_data, file_name,
                                 mode='a', header=False, index=False, encoding='utf-8')
