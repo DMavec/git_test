@@ -17,7 +17,7 @@ def main():
     hist.load('data/game_records.csv')
 
     # Class for loading data into the site database
-    loader = SiteDataLoader('api/rest/db.sqlite3')
+    loader = SiteDataLoader('../api/rest/db.sqlite3')
 
     if hist.new_data:
         # Game Identifier

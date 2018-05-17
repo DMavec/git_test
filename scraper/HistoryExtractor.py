@@ -87,5 +87,6 @@ class HistoryExtractor(object):
             pd.DataFrame.to_csv(game_log, 'data/game_log.csv',
                                 mode='a', header=False, index=False, encoding='utf-8')
 
+            self.load_data = pd.read_csv(file_name)
             self.game_log = pd.read_csv('data/game_log.csv')
             self.new_data = True
