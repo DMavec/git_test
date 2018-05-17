@@ -92,8 +92,7 @@ class HistoryExtractor(object):
                             .filter(['game_id', 'value']))
             skipped_log = pd.DataFrame({'game_id': self.skipped_ids,
                                         'value': [''] * len(self.skipped_ids)})
-            game_log = pd.concat(game_log, skipped_log)
-
+            game_log = pd.concat([game_log, skipped_log])
 
             pd.DataFrame.to_csv(self.load_data, file_name,
                                 mode='a', header=False, index=False, encoding='utf-8')
