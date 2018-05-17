@@ -16,12 +16,19 @@ class HistoryExtractor(object):
         self.game_log = []
         self.new_data = False
 
+    def _extract_timestamp_return_gameid(self, match):
+        self.extract_data.game_id.push(match['gameId'])
+        self.extract_data.attribute.push('timestamp')
+        self.extract_data.value.push(match['timestamp'])
+
+        return match['gameId']
+
     def extract(self, full_load=False):
         if full_load:
             # Used for running historical "catch-up" - should only be required once after migrating
             self.game_ids = self.old_ids
         else:
-            self.game_ids = [match['gameId']
+            self.game_ids = [_extract_timestamp_return_gameid(match)
                              for match_history
                              in [self.api.get_recent_matches(account_id)['matches'] for account_id in self.account_ids]
                              for match
@@ -79,8 +86,8 @@ class HistoryExtractor(object):
 
     def load(self, file_name):
         if len(self.load_data) > 0:
-            game_log = self.load_data[self.load_data.attribute.str.contains('player[0-9]?')]. \
-                filter(['game_id', 'value'])
+            game_log = (self.load_data[self.load_data.attribute.str.contains('player[0-9]?')]
+                            .filter(['game_id', 'value']))
 
             pd.DataFrame.to_csv(self.load_data, file_name,
                                 mode='a', header=False, index=False, encoding='utf-8')
