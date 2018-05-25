@@ -27,7 +27,7 @@ def convert_game(file):
 def main():
     api = RiotAPI(consts.API_KEY)
     hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
-    hist.extract(full_load=True)
+    hist.extract(full_load=False)
     hist.load('data/game_records.csv')
 
     # Class for loading data into the site database
