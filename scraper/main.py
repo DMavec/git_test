@@ -10,6 +10,20 @@ from RiotAPI import RiotAPI
 from SiteDataLoader import SiteDataLoader
 
 
+def convert_game(file):
+    df = pd.read_csv(file)
+    df = df.pivot('game_id', 'attr', 'val')
+    df['players'] = df['player0']
+    for i in range(1, 4):
+        df['players'] += '|' + df['player' + str(i)].fillna('')
+
+    df.drop(['player' + str(i) for i in range(5)], axis=1, inplace=True)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    df['game_id'] = df.index
+
+    return df[['game_id', 'game_outcome', 'players', 'ranked_status', 'timestamp']]
+
+
 def main():
     api = RiotAPI(consts.API_KEY)
     hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
@@ -38,6 +52,11 @@ def main():
         game_records = pd.read_csv('data/game_records.csv')
         game_records['pk'] = game_records['game_id'].astype(str) + game_records['attr']
         loader.upsert(src=game_records, dest='strife_gameattribute', pk='game_id || attr')
+
+        # GameWide Data
+        gamestats = convert_game('data/game_records.csv')
+        gamestats['pk'] = gamestats['game_id']
+        loader.upsert(src=gamestats, dest='strife_gamestats', pk='game_id')
     else:
         print('No new data to load.')
 

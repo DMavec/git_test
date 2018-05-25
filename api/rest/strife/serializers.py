@@ -10,7 +10,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PlayerSerializer(serializers.ModelSerializer):
-    player_tidy = serializers.CharField(max_length=200)
     n_wins = serializers.IntegerField()
     n_games = serializers.IntegerField()
     n_ranked = serializers.IntegerField()
@@ -19,14 +18,25 @@ class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Player
-        fields = ('id', 'player_name', 'player_tidy', 'n_wins', 'n_games', 'n_ranked', 'n_unranked', 'pct_win')
+        fields = ('id', 'player_name', 'n_wins', 'n_games', 'n_ranked', 'n_unranked', 'pct_win')
 
 
-class GameSerializer(serializers.ModelSerializer):
+class GameSerializer(serializers.HyperlinkedModelSerializer):
+    game_outcome = serializers.IntegerField()
+    ranked_status = serializers.IntegerField()
+    timestamp = serializers.DateTimeField(format='%d %b %Y')
+    players = serializers.CharField(max_length=1000)
+
+    class Meta:
+        model = Game
+        fields = ('game_outcome', 'ranked_status', 'timestamp', 'players')
+
+
+class GamePlayerSerializer(serializers.ModelSerializer):
+    player = serializers.CharField(max_length=200)
     game_id = serializers.IntegerField()
-    n_wins = serializers.IntegerField()
-    player = serializers.CharField()
+    game = GameSerializer(many=False, read_only=True)
 
     class Meta:
         model = GamePlayerRelationship
-        fields = ('player', 'game_id', 'n_wins')
+        fields = ('player', 'game_id', 'game')
