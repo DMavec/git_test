@@ -1,14 +1,13 @@
 # Models
-from strife.models import Player, Game, GamePlayerRelationship
+from strife.models import Player, GamePlayerRelationship
 from django.contrib.auth.models import User
 # Serializers
 from strife.serializers import PlayerSerializer, UserSerializer, GameSerializer
 # Permissions
 # from strife.permissions import
 # Rest Framework
-from rest_framework import permissions, viewsets, generics
+from rest_framework import permissions, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
 
 
 class PlayerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -41,9 +40,10 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('player__player_name', )
 
     def get_queryset(self):
-        return GamePlayerRelationship.objects. \
-            add_n_wins(). \
-            order_by('player_id', 'game_id')
+        queryset = GamePlayerRelationship.objects.all()
+        queryset = queryset.select_related('game', 'player')
+        queryset = queryset.add_n_wins().order_by('player_id', 'game_id')
+        return queryset
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
