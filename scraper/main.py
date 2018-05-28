@@ -35,9 +35,9 @@ def main():
 
     if hist.new_data:
         # Game Identifier
-        games = pd.DataFrame({'game_id': hist.game_log['game_id'].unique()})
-        games['pk'] = games['game_id']
-        loader.upsert(src=games, dest='strife_game', pk='game_id')
+        # games = pd.DataFrame({'game_id': hist.game_log['game_id'].unique()})
+        # games['pk'] = games['game_id']
+        # loader.upsert(src=games, dest='strife_game', pk='game_id')
 
         # Game - Player Relationship
         loader.query('SELECT * FROM strife_player')
@@ -54,9 +54,9 @@ def main():
         loader.upsert(src=game_records, dest='strife_gameattribute', pk='game_id || attr')
 
         # GameWide Data
-        gamestats = convert_game('data/game_records.csv')
-        gamestats['pk'] = gamestats['game_id']
-        loader.upsert(src=gamestats, dest='strife_gamestats', pk='game_id')
+        game = convert_game('data/game_records.csv')
+        game['pk'] = game['game_id']
+        loader.upsert(src=game, dest='strife_game', pk='game_id')
     else:
         print('No new data to load.')
 
