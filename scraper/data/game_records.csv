@@ -28190,3 +28190,7 @@ game_id,attr,val
 208934657,player0,dicedstk
 208934657,game_outcome,0
 208934657,ranked_status,1
+208931136,timestamp,1527238103776
+208931136,player0,dicedstk
+208931136,game_outcome,1
+208931136,ranked_status,1
