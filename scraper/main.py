@@ -20,6 +20,7 @@ def convert_game(file):
     df.drop(['player' + str(i) for i in range(5)], axis=1, inplace=True)
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
     df['game_id'] = df.index
+    df = df[df['game_outcome'].notna()]
 
     return df[['game_id', 'game_outcome', 'players', 'ranked_status', 'timestamp']]
 
@@ -59,7 +60,6 @@ def main():
         loader.upsert(src=game, dest='strife_game', pk='game_id')
     else:
         print('No new data to load.')
-
 
 if __name__ == "__main__":
     main()
