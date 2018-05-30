@@ -9,7 +9,7 @@ class PlayerManager(models.QuerySet):
             n_wins=Count('gameplayerrelationship__game__gameattribute',
                          filter=Q(gameplayerrelationship__game__gameattribute__attr='game_outcome') &
                                 Q(gameplayerrelationship__game__gameattribute__val='1')),
-            n_games=Count('gameplayerrelationship__game',
+            n_games=Count('gameplayerrelationship',
                           filter=Q(gameplayerrelationship__game__gameattribute__attr='game_outcome')),
             n_ranked=Count('gameplayerrelationship__game',
                            filter=Q(gameplayerrelationship__game__gameattribute__attr='ranked_status') &

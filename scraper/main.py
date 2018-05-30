@@ -46,7 +46,7 @@ def main():
         game_log = hist.game_log.join(player_lkup.set_index('player_name'), how='inner', on='player_name').\
             rename(columns={'id': 'player_id'}).\
             drop('player_name', axis=1)
-        game_log['pk'] = game_log['game_id'].astype(str) + '_' + game_log['player_id'].astype(str)
+        game_log['pk'] = game_log['game_id'].astype(int).astype(str) + '_' + game_log['player_id'].astype(str)
         loader.upsert(src=game_log, dest='strife_gameplayerrelationship', pk='game_id || \'_\' || player_id')
 
         # Game Data
