@@ -35,7 +35,7 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = GamePlayerRelationship.objects.all()
-        queryset = queryset.select_related('game')
+        queryset = queryset.select_related('game', 'player')
         return queryset
 
 

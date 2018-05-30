@@ -28193,3 +28193,8 @@ game_id,attr,val
 208931136,player0,dicedstk
 208931136,game_outcome,1
 208931136,ranked_status,1
+209336049,timestamp,1527595347373
+209336049,player0,dicedstk
+209336049,player1,loui8sdstk
+209336049,game_outcome,0
+209336049,ranked_status,1
