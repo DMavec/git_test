@@ -17,41 +17,39 @@ class HistoryExtractor(object):
         self.game_log = []
         self.new_data = False
 
-    def _extract_timestamp_return_gameid(self, match):
+    def _extract_timestamp(self, match):
         if not match['gameId'] in self.extract_data['game_id']:
             self.extract_data['game_id'] += [match['gameId']]
             self.extract_data['attribute'] += ['timestamp']
             self.extract_data['value'] += [match['timestamp']]
 
-        return match['gameId']
-
-    def extract(self, full_load=False):
+    def identify_new_games(self, full_load=False):
         if full_load:
             for account_id in self.account_ids:
-                start_index = 0
+                begin_index = 0
                 n_records = 1
                 while n_records > 0:
-                    match_history = self.api.get_recent_matches(account_id, start_index)['matches']
+                    match_history = self.api.get_recent_matches(account_id, begin_index)['matches']
                     n_records = len(match_history)
-                    self.game_ids += [self._extract_timestamp_return_gameid(match) for match in match_history]
-                    start_index += 100
-
+                    begin_index += 100
+                    for match in match_history:
+                        self._extract_timestamp(match)
         else:
-            self.game_ids = [self._extract_timestamp_return_gameid(match)
-                             for match_history
-                             in [self.api.get_recent_matches(account_id)['matches'] for account_id in self.account_ids]
-                             for match
-                             in match_history
-                             if match['gameId'] not in self.old_ids]
+            for account_id in self.account_ids:
+                match_history = self.api.get_recent_matches(account_id, begin_index=0)['matches']
+                for match in match_history:
+                    game_id = match['gameId']
+                    if game_id not in self.old_ids:
+                        self._extract_timestamp(match)
 
-        self.game_ids = pd.Series(self.game_ids).drop_duplicates().tolist()
+        self.game_ids = pd.Series(self.extract_data['game_id']).drop_duplicates().tolist()
 
+    def extract(self):
         if len(self.game_ids) == 0:
-            return 'No new data'
+            return 'No data to load'
         else:
-            [self._extract_by_game_id(gameId) for gameId in self.game_ids]
-            self.load_data = pd.DataFrame(self.extract_data). \
-                reindex(columns=['game_id', 'attribute', 'value']).drop_duplicates()
+            for game_id in self.game_ids:
+                self._extract_by_game_id(game_id)
 
     def _extract_by_game_id(self, game_id):
         match_details = self.api.get_match(game_id)
@@ -63,7 +61,6 @@ class HistoryExtractor(object):
                 self.skipped_ids += [game_id]
                 return 'skip'
         except:
-            # print(match_details)
             print('Unexpected error with data checking in _extract_by_game_id:', sys.exc_info()[0])
 
         players = [re.sub('[\s+]', '', participantIdentity['player']['summonerName']).lower()
@@ -71,7 +68,7 @@ class HistoryExtractor(object):
                    in match_details['participantIdentities']]
         team = [player for player in players if player in self.summoner_names]
 
-        # # Identify which participant id matches the summoner name
+        # Identify which participant id matches the summoner name
         pid = [participantIdentity['participantId']
                for participantIdentity
                in match_details['participantIdentities']
@@ -95,6 +92,11 @@ class HistoryExtractor(object):
         return 'run'
 
     def load(self, file_name):
+        self.load_data = (pd.DataFrame(self.extract_data)
+                            .reindex(columns=['game_id', 'attribute', 'value'])
+                            .drop_duplicates()
+                          )
+
         if len(self.load_data) > 0:
             game_log = (self.load_data[self.load_data.attribute.str.contains('player[0-9]?')]
                             .filter(['game_id', 'value']))
