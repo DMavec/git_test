@@ -24,7 +24,7 @@ def convert_game_records(game_records):
 def main():
     api = RiotAPI(consts.API_KEY)
     hist = HistoryExtractor(summoner_names=consts.SUMMONER_NAMES, api=api)
-    hist.identify_new_games(full_load=F alse)
+    hist.identify_new_games(full_load=False)
     hist.extract()
     hist.load('data/game_records.csv')
 
