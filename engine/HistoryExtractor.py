@@ -39,14 +39,15 @@ def get_new_game_ids(api, account_ids, loaded_games, full_load=False):
 
 
 ## Extract data for new games
-def extract_game(api, account_ids, game_id, ts):
+def extract_game(api, summoner_names, game_id, ts):
     try:
         match_details = api.get_match(game_id)
         if match_details is None:
             Warning('Request failed')
+            return []
         elif match_details['gameMode'] != 'CLASSIC':
             Warning('Non-classic game')
-        return None
+            return []
     except:
         #TODO: Read up on exceptions and make this better
         Exception('Unexpected error with data checking in extract_game:', sys.exc_info()[0])
@@ -54,7 +55,7 @@ def extract_game(api, account_ids, game_id, ts):
     players = [re.sub('[\s+]', '', participantIdentity['player']['summonerName']).lower()
                for participantIdentity
                in match_details['participantIdentities']]
-    team = [player for player in players if player in self.summoner_names]
+    team = [player for player in players if player in summoner_names]
 
     # Identify which participant id matches the summoner name
     pid = [participantIdentity['participantId']
@@ -67,33 +68,25 @@ def extract_game(api, account_ids, game_id, ts):
                       if x['participantId'] == pid[0]][0])
     ranked_status = int(len(match_details['teams'][0]['bans']) > 0)
 
-    data_attribute = ['player' + str(x) for x in list(range(0, len(team)))]
-    data_value = team
-
-    data_attribute.extend(['game_outcome', 'ranked_status'])
-    data_value.extend([str(win_status), str(ranked_status)])
-
-    # TODO: Replace with an update_or_create directly into database
-    self.extract_data['game_id'] += [game_id] * len(data_attribute)
-    self.extract_data['attribute'] += data_attribute
-    self.extract_data['value'] += data_value
-
-    return 'run'
+    for team_player in team:
+        return [(game_id, team_player, ts, '|'.join(team), win_status, ranked_status)]
 
 
-def extract_games(api, account_ids, new_game_ids):
+def extract_games(api, summoner_names, new_game_ids):
     if len(new_game_ids) == 0:
         Warning('No new data to load')
     else:
         game_data = []
-        for (game_id, ts) in new_game_ids:
-            game_data += extract_game(api, account_ids, game_id, ts)
+        for (game_id, ts) in list(new_game_ids)[0:5]:
+            game_data += extract_game(api, summoner_names, game_id, ts)
+
+        return game_data
 
 
 ## Transform data
 
 ## Load data
-
+# TODO: Replace with an update_or_create directly into database
 
 def test_load():
     # Initialise API
@@ -105,8 +98,8 @@ def test_load():
 
     loaded_games = get_loaded_game_ids()
     new_games = get_new_game_ids(api, account_ids, loaded_games)
-    for game in new_games:
-        print(game)
+    game_data = extract_games(api, summoner_names, new_games)
+    print(game_data)
 
 
 class HistoryExtractor(object):

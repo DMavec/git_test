@@ -23,7 +23,7 @@ REGIONS = {
 }
 
 SUMMONER_NAMES = [
-    'diggs',
+    # 'diggs',
     # 'bumster',
     # 'mwaxy',
     'loui8sdstk',
