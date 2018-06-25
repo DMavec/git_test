@@ -1,6 +1,6 @@
 import pandas as pd
 
-# API_KEY = pd.read_csv('data/api_key.txt')
+API_KEY = pd.read_csv('engine/data/api_key.txt')
 
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',
@@ -24,14 +24,14 @@ REGIONS = {
 
 SUMMONER_NAMES = [
     'diggs',
-    'bumster',
-    'mwaxy',
+    # 'bumster',
+    # 'mwaxy',
     'loui8sdstk',
-    'smatties',
-    'skandaras',
-    'menelaus34',
-    'dicedstk',
-    'loui9sdstk',
+    # 'smatties',
+    # 'skandaras',
+    # 'menelaus34',
+    # 'dicedstk',
+    # 'loui9sdstk',
 
     # 'endgamedos',
     # '2dmin'
@@ -49,6 +49,3 @@ SUMMONER_NAMES = [
     # 'thereisnosaurus',
     # 'kkfizzban'
 ]
-
-# OLD_IDS = pd.read_csv('data/game_log.csv')
-# OLD_IDS = OLD_IDS[OLD_IDS.player_name.isin(SUMMONER_NAMES)]

@@ -2,23 +2,117 @@ import re
 import sys
 import pandas as pd
 import engine.constants as consts
+from engine.RiotAPI import RiotAPI
 from api.models import Game, Player, GamePlayerRelationship, GameAttribute
 
 
+## Get account IDs
 def get_account_ids(api, summoner_names):
     return [api.get_summoner_by_name(name)['accountId'] for name in summoner_names]
 
-def get_past_game_ids():
-    game = Game.objects.get_or_create(game_id=124)
 
-    games = Game.objects.all().values_list('game_id', flat=True)
-    print(games)
+## Get already loaded game IDs
+def get_loaded_game_ids():
+    return [game for game in Game.objects.all().values_list('game_id', flat=True)]
+
+
+## Get list of new games to load
+def get_new_game_ids(api, account_ids, loaded_games, full_load=False):
+    match_list = []
+    for account_id in account_ids:
+        if full_load:
+            begin_index = 0
+            n_records = 1
+            while n_records > 0:
+                match_history = api.get_recent_matches(account_id, begin_index)['matches']
+                n_records = len(match_history)
+                begin_index += 100
+                for match in match_history:
+                    match_list += [(match['gameId'], match['timestamp'])]
+        else:
+            match_history = api.get_recent_matches(account_id, begin_index=0)['matches']
+            for match in match_history:
+                game_id = match['gameId']
+                if game_id not in loaded_games:
+                    match_list += [(match['gameId'], match['timestamp'])]
+    return set(match_list)
+
+
+## Extract data for new games
+def extract_game(api, account_ids, game_id, ts):
+    try:
+        match_details = api.get_match(game_id)
+        if match_details is None:
+            Warning('Request failed')
+        elif match_details['gameMode'] != 'CLASSIC':
+            Warning('Non-classic game')
+        return None
+    except:
+        #TODO: Read up on exceptions and make this better
+        Exception('Unexpected error with data checking in extract_game:', sys.exc_info()[0])
+
+    players = [re.sub('[\s+]', '', participantIdentity['player']['summonerName']).lower()
+               for participantIdentity
+               in match_details['participantIdentities']]
+    team = [player for player in players if player in self.summoner_names]
+
+    # Identify which participant id matches the summoner name
+    pid = [participantIdentity['participantId']
+           for participantIdentity
+           in match_details['participantIdentities']
+           if team[0] in re.sub('[\s+]', '', participantIdentity['player']['summonerName']).lower()]
+
+    win_status = int([x['stats']['win']
+                      for x in match_details['participants']
+                      if x['participantId'] == pid[0]][0])
+    ranked_status = int(len(match_details['teams'][0]['bans']) > 0)
+
+    data_attribute = ['player' + str(x) for x in list(range(0, len(team)))]
+    data_value = team
+
+    data_attribute.extend(['game_outcome', 'ranked_status'])
+    data_value.extend([str(win_status), str(ranked_status)])
+
+    # TODO: Replace with an update_or_create directly into database
+    self.extract_data['game_id'] += [game_id] * len(data_attribute)
+    self.extract_data['attribute'] += data_attribute
+    self.extract_data['value'] += data_value
+
+    return 'run'
+
+
+def extract_games(api, account_ids, new_game_ids):
+    if len(new_game_ids) == 0:
+        Warning('No new data to load')
+    else:
+        game_data = []
+        for (game_id, ts) in new_game_ids:
+            game_data += extract_game(api, account_ids, game_id, ts)
+
+
+## Transform data
+
+## Load data
+
+
+def test_load():
+    # Initialise API
+    api = RiotAPI(consts.API_KEY)
+
+    # Get summoner names
+    summoner_names = consts.SUMMONER_NAMES
+    account_ids = get_account_ids(api, summoner_names)
+
+    loaded_games = get_loaded_game_ids()
+    new_games = get_new_game_ids(api, account_ids, loaded_games)
+    for game in new_games:
+        print(game)
 
 
 class HistoryExtractor(object):
-    def __init__(self, summoner_names, api):
-        self.summoner_names = [name.lower() for name in summoner_names]
+    def __init__(self, api, summoner_names):
         self.api = api
+        self.summoner_names = [name.lower() for name in summoner_names]
         self.account_ids = [api.get_summoner_by_name(name)['accountId'] for name in self.summoner_names]
         self.old_ids = consts.OLD_IDS.drop_duplicates('game_id', keep='last')['game_id'].tolist()
         self.game_ids = []

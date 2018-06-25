@@ -3,7 +3,7 @@ from time import sleep
 import backoff
 import requests
 
-import constants as consts
+import engine.constants as consts
 
 class RiotAPI(object):
     def __init__(self, api_key, region=consts.REGIONS['oceania']):

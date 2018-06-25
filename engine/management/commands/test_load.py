@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
-from api.models import Game
+from engine.HistoryExtractor import test_load
 
 class Command(BaseCommand):
     help = 'Adds past game ids to the db'
 
     def handle(self, *args, **options):
-        Game.objects.get_or_create(game_id=124)
+        test_load()
