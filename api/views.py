@@ -19,9 +19,7 @@ class PlayerViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
-        return Player.objects. \
-            annotate_fields(). \
-            order_by('-pct_win')
+        return Player.objects.annotate_fields()
 
 
 class GameViewSet(viewsets.ReadOnlyModelViewSet):
@@ -36,7 +34,6 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Game.objects.all()
-        queryset = queryset.select_related('game', 'player')
         return queryset
 
 

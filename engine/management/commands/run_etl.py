@@ -3,7 +3,11 @@ from engine.etl import run_etl
 
 
 class Command(BaseCommand):
-    help = 'Adds past game ids to the db'
+    help = '''Loads new game data into the api.
+      full_load: default false
+      Run on all available data from api. By default only checks the last 100 games.'''
 
     def handle(self, *args, **options):
+
+
         run_etl()

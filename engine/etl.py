@@ -80,7 +80,7 @@ def extract_games(api, summoner_names, new_game_ids):
         Warning('No new data to load')
     else:
         game_data = []
-        for (game_id, ts) in list(new_game_ids)[0:5]:
+        for (game_id, ts) in list(new_game_ids):
             game_data += extract_game(api, summoner_names, game_id, ts)
 
         return game_data
