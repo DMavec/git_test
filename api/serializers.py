@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Player, Game, GamePlayerRelationship
+from api.models import Player, Game
 from django.contrib.auth.models import User
 
 
@@ -30,13 +30,3 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Game
         fields = ('game_outcome', 'ranked_status', 'timestamp', 'players')
-
-
-class GamePlayerSerializer(serializers.ModelSerializer):
-    player = serializers.CharField(max_length=200)
-    game_id = serializers.IntegerField()
-    game = GameSerializer(many=False, read_only=True)
-
-    class Meta:
-        model = GamePlayerRelationship
-        fields = ('player', 'game_id', 'game')

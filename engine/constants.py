@@ -23,15 +23,15 @@ REGIONS = {
 }
 
 SUMMONER_NAMES = [
-    # 'diggs',
-    # 'bumster',
-    # 'mwaxy',
+    'diggs',
+    'bumster',
+    'mwaxy',
     'loui8sdstk',
-    # 'smatties',
-    # 'skandaras',
-    # 'menelaus34',
-    # 'dicedstk',
-    # 'loui9sdstk',
+    'smatties',
+    'skandaras',
+    'menelaus34',
+    'dicedstk',
+    'loui9sdstk',
 
     # 'endgamedos',
     # '2dmin'
