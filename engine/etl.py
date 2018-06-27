@@ -43,10 +43,9 @@ def extract_game(api, summoner_names, game_id, ts):
     try:
         match_details = api.get_match(game_id)
         if match_details is None:
-            Warning('Request failed')
-            return []
+            Exception('Request failed')
         elif match_details['gameMode'] != 'CLASSIC':
-            return [([], {'game_id': game_id, 'ts': ts})]
+            return [], {'game_id': game_id, 'ts': pd.to_datetime(ts, unit='ms', utc=True)}
     except:
         # TODO: Read up on exceptions and make this better
         Exception('Unexpected error with data checking in extract_game:', sys.exc_info()[0])
@@ -67,32 +66,31 @@ def extract_game(api, summoner_names, game_id, ts):
                         if x['participantId'] == participant_id[0]][0])
     ranked_status = int(len(match_details['teams'][0]['bans']) > 0)
 
-    return [(team,
-             {'game_id': game_id,
-              'ts': pd.to_datetime(ts, unit='ms', utc=True),
-              'game_outcome': game_outcome,
-              'ranked_status': ranked_status,
-              'players': '|'.join(team)})]
-
-
-def extract_games(api, summoner_names, new_game_ids):
-    if len(new_game_ids) == 0:
-        Warning('No new data to load')
-    else:
-        game_data = []
-        for (game_id, ts) in list(new_game_ids):
-            game_data += extract_game(api, summoner_names, game_id, ts)
-
-        return game_data
+    return (team,
+            {'game_id': game_id,
+             'ts': pd.to_datetime(ts, unit='ms', utc=True),
+             'game_outcome': game_outcome,
+             'ranked_status': ranked_status,
+             'players': '|'.join(team)})
 
 
 ## Load data
-def load_games(game_data):
-    for (players, data) in game_data:
-        game, created = Game.objects.get_or_create(**data)
-        for player in players:
-            game.player.add(Player.objects.get(player_name=player))
-        game.save()
+def load_game(players, payload):
+    game, created = Game.objects.get_or_create(**payload)
+    for player in players:
+        game.player.add(Player.objects.get(player_name=player))
+    game.save()
+
+
+def etl_games(api, summoner_names, new_game_ids):
+    if len(new_game_ids) == 0:
+        Warning('No new data to load')
+    else:
+        for (game_id, ts) in list(new_game_ids):
+            # print(ts)
+            players, payload = extract_game(api, summoner_names, game_id, ts)
+            # print(players, payload)
+            load_game(players, payload)
 
 
 def run_etl():
@@ -105,8 +103,7 @@ def run_etl():
 
     loaded_games = get_loaded_game_ids()
     new_games = get_new_game_ids(api, account_ids, loaded_games)
-    game_data = extract_games(api, summoner_names, new_games)
-    load_games(game_data)
+    etl_games(api, summoner_names, new_games)
 
 
 if __name__ == "__main__":

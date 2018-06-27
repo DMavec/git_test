@@ -8,5 +8,5 @@ class Command(BaseCommand):
       Run on all available data from api. By default only checks the last 100 games.'''
 
     def handle(self, *args, **options):
-        ## TODO: Add optional argument to run the full load
+        # TODO: Add optional argument to run the full load
         run_etl()
