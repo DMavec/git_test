@@ -17,6 +17,7 @@ class PlayerManager(models.QuerySet):
 
 class Player(models.Model):
     player_name = models.CharField(primary_key=True, max_length=200)
+    account_id = models.IntegerField(default=-999)
 
     objects = PlayerManager.as_manager()
 
