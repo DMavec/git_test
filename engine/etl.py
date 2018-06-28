@@ -7,13 +7,13 @@ from api.models import Game, Player
 
 
 ## Get account IDs
-def get_account_ids(api, summoner_names):
-    return [api.get_summoner_by_name(name)['accountId'] for name in summoner_names]
+def get_account_ids(summoner_names):
+    return [player.account_id for player in Player.objects.all() if player.player_name in summoner_names]
 
 
 ## Get already loaded game IDs
 def get_loaded_game_ids():
-    return [game for game in Game.objects.all().values_list('game_id', flat=True)]
+    return [game.game_id for game in Game.objects.all()]
 
 
 ## Get list of new games to load
@@ -93,17 +93,12 @@ def etl_games(api, summoner_names, new_game_ids):
             load_game(players, payload)
 
 
-def run_etl():
-    # Initialise API
+def run_etl(full_load=False):
     api = RiotAPI(consts.API_KEY)
-
-    # Get summoner names
-    summoner_names = consts.SUMMONER_NAMES
-    account_ids = get_account_ids(api, summoner_names)
-
+    account_ids = get_account_ids(consts.SUMMONER_NAMES)
     loaded_games = get_loaded_game_ids()
-    new_games = get_new_game_ids(api, account_ids, loaded_games)
-    etl_games(api, summoner_names, new_games)
+    new_games = get_new_game_ids(api, account_ids, loaded_games, full_load=full_load)
+    etl_games(api, consts.SUMMONER_NAMES, new_games)
 
 
 if __name__ == "__main__":

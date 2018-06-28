@@ -5,7 +5,7 @@ from engine.RiotAPI import RiotAPI
 
 
 class Command(BaseCommand):
-    help = 'Adds players to the db'
+    help = 'Adds players to the db.'
 
     def handle(self, *args, **options):
         api = RiotAPI(API_KEY)
