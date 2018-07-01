@@ -1,6 +1,4 @@
-import pandas as pd
-
-API_KEY = pd.read_csv('engine/data/api_key.txt')
+RIOT_API_KEY = open('engine/credentials/riot_key.txt').read()
 
 URL = {
     'base': 'https://{proxy}.api.riotgames.com/lol/{static}{url}',

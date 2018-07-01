@@ -12,7 +12,7 @@ class Command(BaseCommand):
                             help='The numeric identifier of the game to be loaded.')
 
     def handle(self, *args, **options):
-        api = RiotAPI(consts.API_KEY)
+        api = RiotAPI(consts.RIOT_API_KEY)
         account_ids = get_account_ids(consts.SUMMONER_NAMES)
         new_games = [game for game in get_new_game_ids(api, account_ids, []) if game[0] == options['game_id'][0]]
         print(new_games)

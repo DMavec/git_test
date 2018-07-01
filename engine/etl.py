@@ -94,7 +94,7 @@ def etl_games(api, summoner_names, new_game_ids):
 
 
 def run_etl(full_load=False):
-    api = RiotAPI(consts.API_KEY)
+    api = RiotAPI(consts.RIOT_API_KEY)
     account_ids = get_account_ids(consts.SUMMONER_NAMES)
     loaded_games = get_loaded_game_ids()
     new_games = get_new_game_ids(api, account_ids, loaded_games, full_load=full_load)
