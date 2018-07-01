@@ -3,9 +3,7 @@ from engine.etl import run_etl
 
 
 class Command(BaseCommand):
-    help = '''Loads new game data into the api.
-      full_load: default 0
-      Set argument to 1 to run on all available data from api. By default only checks the last 100 games.'''
+    help = 'Extracts, transforms and loads new game data into the api.'
 
     def add_arguments(self, parser):
         parser.add_argument('full_load', nargs='+', type=bool,
