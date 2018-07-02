@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q, F, FloatField, Count, Sum, Value, DecimalField, Max
+from django.db.models import Q, F, FloatField, Count, Sum, Value, DecimalField
 from django.db.models.functions import Cast
 
 
@@ -9,9 +9,9 @@ class PlayerManager(models.QuerySet):
             n_wins=Sum('game__game_outcome'),
             n_games=Count('game'),
             n_ranked=Sum('game__ranked_status'),
-            n_unranked=F('n_games') - F('n_ranked')
-            # pct_win=Cast(Cast(Value(100) * F('n_wins'), FloatField()) / Cast(F('n_games'), FloatField()),
-            #              DecimalField(decimal_places=2))
+            n_unranked=F('n_games') - F('n_ranked'),
+            pct_win=Cast(Cast(Value(100) * F('n_wins'), FloatField()) / Cast(F('n_games'), FloatField()),
+                         DecimalField(decimal_places=2))
         ).order_by('-n_wins')
 
 

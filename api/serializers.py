@@ -14,11 +14,11 @@ class PlayerSerializer(serializers.ModelSerializer):
     n_games = serializers.IntegerField()
     n_ranked = serializers.IntegerField()
     n_unranked = serializers.IntegerField()
-    # pct_win = serializers.DecimalField(max_digits=4, decimal_places=2)
+    pct_win = serializers.DecimalField(max_digits=4, decimal_places=2)
 
     class Meta:
         model = Player
-        fields = ('player_name', 'n_wins', 'n_games', 'n_ranked', 'n_unranked')#, 'pct_win')
+        fields = ('player_name', 'n_wins', 'n_games', 'n_ranked', 'n_unranked', 'pct_win')
 
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
