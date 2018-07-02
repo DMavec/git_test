@@ -76,7 +76,9 @@ def extract_game(api, summoner_names, game_id, ts):
 
 ## Load data
 def load_game(players, payload):
-    game, created = Game.objects.get_or_create(**payload)
+    game_id = payload.pop('game_id')
+    print(game_id, payload)
+    game, created = Game.objects.update_or_create(defaults=payload, game_id=game_id)
     for player in players:
         game.player.add(Player.objects.get(player_name=player))
     game.save()
