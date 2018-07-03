@@ -6,8 +6,13 @@ class Command(BaseCommand):
     help = 'Extracts, transforms and loads new game data into the api.'
 
     def add_arguments(self, parser):
-        parser.add_argument('full_load', nargs='+', type=bool,
-                            help='Set to 1 to run on all available data from api. By default only checks the last 100 games.')
+        # Named (optional) arguments
+        parser.add_argument(
+            '--full_load',
+            action='store_true',
+            dest='full_load',
+            help='Run on all available data from Riot API instead of only checking for new games in the last 100.',
+        )
 
     def handle(self, *args, **options):
-        run_etl(full_load=options['full_load'][0])
+        run_etl(full_load=options['full_load'])
