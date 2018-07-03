@@ -99,8 +99,12 @@ def run_etl(full_load=False):
     api = RiotAPI(consts.RIOT_API_KEY)
     account_ids = get_account_ids(consts.SUMMONER_NAMES)
     loaded_games = get_loaded_game_ids()
+    num_loaded_before_etl = len(loaded_games)
     new_games = get_new_game_ids(api, account_ids, loaded_games, full_load=full_load)
     etl_games(api, consts.SUMMONER_NAMES, new_games)
+    num_loaded_after_etl = len(loaded_games)
+    print('Number of games loaded:', num_loaded_after_etl - num_loaded_before_etl,
+          '(' + str(num_loaded_after_etl) + ' total)')
 
 
 if __name__ == "__main__":
