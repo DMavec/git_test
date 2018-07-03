@@ -1,14 +1,15 @@
-# Postgres temp
-api/rest/data/
-
 # PyCharm Settings
 ?idea/
 __pycache__/
 *.pyc
 *.pub
 
+# Data
+db.sqlite3
+
 #API Key
-api_key.txt
+engine/credentials/
+
 
 # Windows image file caches
 Thumbs.db
