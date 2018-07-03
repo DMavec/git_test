@@ -25,8 +25,8 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
     game_outcome = serializers.IntegerField()
     ranked_status = serializers.IntegerField()
     ts = serializers.DateTimeField(format='%d %b %Y')
-    players = serializers.CharField(max_length=1000)
+    # players = serializers.CharField(max_length=1000)
 
     class Meta:
         model = Game
-        fields = ('game_outcome', 'ranked_status', 'ts', 'players')
+        fields = ('game_outcome', 'ranked_status', 'ts')
