@@ -102,7 +102,7 @@ def run_etl(full_load=False):
     num_loaded_before_etl = len(loaded_games)
     new_games = get_new_game_ids(api, account_ids, loaded_games, full_load=full_load)
     etl_games(api, consts.SUMMONER_NAMES, new_games)
-    num_loaded_after_etl = len(loaded_games)
+    num_loaded_after_etl = len(get_loaded_game_ids())
     print('Number of games loaded:', num_loaded_after_etl - num_loaded_before_etl,
           '(' + str(num_loaded_after_etl) + ' total)')
 
