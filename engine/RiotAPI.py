@@ -18,12 +18,12 @@ class RiotAPI(object):
             if key not in args:
                 args[key] = value
 
-        print(URL['base'].format(
-            proxy=self.region,
-            static='static-data/' if static else '',
-            region=self.region,
-            url=api_url
-        ))
+        # print(URL['base'].format(
+        #     proxy=self.region,
+        #     static='static-data/' if static else '',
+        #     region=self.region,
+        #     url=api_url
+        # ))
 
         retries = 1
         while 0 < retries < 5:
